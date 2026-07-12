@@ -28,8 +28,6 @@ type SecondaryTab = "all" | "action-needed";
 interface TransactionHistoryPageProps {
   onSelectTransaction: (transaction: TransactionRow) => void;
   onSelectBankTransfer: (transaction: BankTransferRow) => void;
-  onSelectSwap: (transaction: SwapTransactionRow) => void;
-  onSelectOtc: (transaction: SwapTransactionRow) => void;
   primaryTab: PrimaryTab;
   onPrimaryTabChange: (tab: PrimaryTab) => void;
   secondaryTab: SecondaryTab;
@@ -70,7 +68,7 @@ function CopyCell({ value, children, className }: { value: string; children: Rea
   );
 }
 
-export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransfer, onSelectSwap, onSelectOtc, primaryTab, onPrimaryTabChange, secondaryTab, onSecondaryTabChange, page, onPageChange }: TransactionHistoryPageProps) {
+export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransfer, primaryTab, onPrimaryTabChange, secondaryTab, onSecondaryTabChange, page, onPageChange }: TransactionHistoryPageProps) {
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
   const [modalOpen, setModalOpen] = useState(false);
@@ -503,13 +501,9 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       header: "Transaction ID",
       render: (row: SwapTransactionRow) => (
         <CopyCell value={row.fullId}>
-          <button
-            type="button"
-            className="txn-page__cell-id"
-            onClick={() => onSelectSwap(row)}
-          >
+          <span className="txn-page__cell-text">
             {row.fullId.slice(0, 11)}....{row.fullId.slice(-4)}
-          </button>
+          </span>
         </CopyCell>
       ),
     },
@@ -559,13 +553,9 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       header: "Transaction ID",
       render: (row: SwapTransactionRow) => (
         <CopyCell value={row.fullId}>
-          <button
-            type="button"
-            className="txn-page__cell-id"
-            onClick={() => onSelectOtc(row)}
-          >
-            {row.fullId.slice(0, 11)}....{row.fullId.slice(-4)}
-          </button>
+          <span className="txn-page__cell-text">
+            {row.fullId}
+          </span>
         </CopyCell>
       ),
     },
