@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
   PageTitle,
   Button,
@@ -7,7 +7,6 @@ import {
   Table,
   Tag,
   Icon,
-  Pagination,
   EmptyState,
   Modal,
   Badge,
@@ -32,8 +31,6 @@ interface TransactionHistoryPageProps {
   onPrimaryTabChange: (tab: PrimaryTab) => void;
   secondaryTab: SecondaryTab;
   onSecondaryTabChange: (tab: SecondaryTab) => void;
-  page: number;
-  onPageChange: (page: number) => void;
 }
 
 function CopyCell({ value, children, className }: { value: string; children: React.ReactNode; className?: string }) {
@@ -68,11 +65,15 @@ function CopyCell({ value, children, className }: { value: string; children: Rea
   );
 }
 
-export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransfer, primaryTab, onPrimaryTabChange, secondaryTab, onSecondaryTabChange, page, onPageChange }: TransactionHistoryPageProps) {
+export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransfer, primaryTab, onPrimaryTabChange, secondaryTab, onSecondaryTabChange }: TransactionHistoryPageProps) {
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
   const [modalOpen, setModalOpen] = useState(false);
   const [modalTransaction, setModalTransaction] = useState<TransactionRow | null>(null);
+
+  // Infinite scroll state
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [loading, setLoading] = useState(false);
 
   // Filter state
   const [filterModalOpen, setFilterModalOpen] = useState(false);
@@ -101,7 +102,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
     setFilterDateFrom(tempFilterDateFrom);
     setFilterDateTo(tempFilterDateTo);
     setFilterModalOpen(false);
-    onPageChange(1);
+    setVisibleCount(PAGE_SIZE);
   };
 
   const resetFilter = () => {
@@ -368,22 +369,28 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
     return result;
   }, [search, secondaryTab, sortOrder, filterStatus, filterAsset, filterDateFrom, filterDateTo]);
 
-  // Pagination
+  // Infinite scroll — show visibleCount rows from the filtered data
   const activeData = primaryTab === "swap" ? filteredSwapData : primaryTab === "otc" ? filteredOtcData : primaryTab === "bank-transfer" ? filteredBankData : filteredData;
-  const totalPages = Math.ceil(activeData.length / PAGE_SIZE);
-  const paginatedData = activeData.slice(
-    (page - 1) * PAGE_SIZE,
-    page * PAGE_SIZE
-  );
+  const visibleData = activeData.slice(0, visibleCount);
+  const hasMore = visibleCount < activeData.length;
+
+  const handleLoadMore = useCallback(() => {
+    setLoading(true);
+    // Simulate network latency for realistic UX
+    setTimeout(() => {
+      setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, activeData.length));
+      setLoading(false);
+    }, 400);
+  }, [activeData.length]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
-    onPageChange(1);
+    setVisibleCount(PAGE_SIZE);
   };
 
   const handlePrimaryTabChange = (tabId: string) => {
     onPrimaryTabChange(tabId as PrimaryTab);
-    onPageChange(1);
+    setVisibleCount(PAGE_SIZE);
   };
 
   // Is this an empty-state tab?
@@ -735,10 +742,10 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
             {/* Swap Table */}
             <Table
               columns={swapColumns as any}
-              rows={paginatedData as any}
+              rows={visibleData as any}
               empty="No transactions found."
               scrollX={undefined}
-              scrollY={undefined}
+              scrollY={480}
               sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
               onSortChange={(sortState: { key: string; direction: "asc" | "desc" } | null) => {
                 if (sortState && sortState.key === "date") {
@@ -747,6 +754,10 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                   setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
                 }
               }}
+              onLoadMore={handleLoadMore}
+              hasMore={hasMore}
+              loading={loading}
+              endLabel={`All ${activeData.length} data already shown`}
             />
           </>
         ) : primaryTab === "otc" ? (
@@ -786,10 +797,10 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
             {/* OTC Table */}
             <Table
               columns={otcColumns as any}
-              rows={paginatedData as any}
+              rows={visibleData as any}
               empty="No transactions found."
               scrollX={undefined}
-              scrollY={undefined}
+              scrollY={480}
               sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
               onSortChange={(sortState: { key: string; direction: "asc" | "desc" } | null) => {
                 if (sortState && sortState.key === "date") {
@@ -798,6 +809,10 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                   setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
                 }
               }}
+              onLoadMore={handleLoadMore}
+              hasMore={hasMore}
+              loading={loading}
+              endLabel={`All ${activeData.length} data already shown`}
             />
           </>
         ) : primaryTab === "bank-transfer" ? (
@@ -837,14 +852,14 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 <button
                   type="button"
                   className={`txn-page__sec-tab ${secondaryTab === "all" ? "txn-page__sec-tab--active" : ""}`}
-                  onClick={() => { onSecondaryTabChange("all"); onPageChange(1); }}
+                  onClick={() => { onSecondaryTabChange("all"); setVisibleCount(PAGE_SIZE); }}
                 >
                   All
                 </button>
                 <button
                   type="button"
                   className={`txn-page__sec-tab ${secondaryTab === "action-needed" ? "txn-page__sec-tab--active" : ""}`}
-                  onClick={() => { onSecondaryTabChange("action-needed"); onPageChange(1); }}
+                  onClick={() => { onSecondaryTabChange("action-needed"); setVisibleCount(PAGE_SIZE); }}
                 >
                   Action Needed
                   <Badge tone="critical">{bankActionNeededCount}</Badge>
@@ -855,10 +870,10 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
             {/* Bank Transfer Table */}
             <Table
               columns={bankColumns as any}
-              rows={paginatedData as any}
+              rows={visibleData as any}
               empty="No transactions found."
               scrollX={secondaryTab === "action-needed" ? 900 : undefined}
-              scrollY={undefined}
+              scrollY={480}
               sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
               onSortChange={(sortState: { key: string; direction: "asc" | "desc" } | null) => {
                 if (sortState && sortState.key === "date") {
@@ -867,6 +882,10 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                   setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
                 }
               }}
+              onLoadMore={handleLoadMore}
+              hasMore={hasMore}
+              loading={loading}
+              endLabel={`All ${activeData.length} data already shown`}
             />
           </>
         ) : (
@@ -906,14 +925,14 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 <button
                   type="button"
                   className={`txn-page__sec-tab ${secondaryTab === "all" ? "txn-page__sec-tab--active" : ""}`}
-                  onClick={() => { onSecondaryTabChange("all"); onPageChange(1); }}
+                  onClick={() => { onSecondaryTabChange("all"); setVisibleCount(PAGE_SIZE); }}
                 >
                   All
                 </button>
                 <button
                   type="button"
                   className={`txn-page__sec-tab ${secondaryTab === "action-needed" ? "txn-page__sec-tab--active" : ""}`}
-                  onClick={() => { onSecondaryTabChange("action-needed"); onPageChange(1); }}
+                  onClick={() => { onSecondaryTabChange("action-needed"); setVisibleCount(PAGE_SIZE); }}
                 >
                   Action Needed
                   <Badge tone="critical">{actionNeededCount}</Badge>
@@ -924,10 +943,10 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
             {/* Table */}
             <Table
               columns={columns as any}
-              rows={paginatedData as any}
+              rows={visibleData as any}
               empty="No transactions found."
               scrollX={secondaryTab === "action-needed" ? 900 : undefined}
-              scrollY={undefined}
+              scrollY={480}
               sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
               onSortChange={(sortState: { key: string; direction: "asc" | "desc" } | null) => {
                 if (sortState && sortState.key === "date") {
@@ -937,23 +956,14 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                   setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
                 }
               }}
+              onLoadMore={handleLoadMore}
+              hasMore={hasMore}
+              loading={loading}
+              endLabel={`All ${activeData.length} data already shown`}
             />
           </>
         )}
       </div>
-
-      {!isEmptyTab && totalPages > 1 && (
-        <div className="txn-page__pagination">
-          <Pagination
-            page={page}
-            totalPages={totalPages}
-            total={activeData.length}
-            pageSize={PAGE_SIZE}
-            onChange={onPageChange}
-            showSummary
-          />
-        </div>
-      )}
 
       {/* Confirm Deposit Modal */}
       <Modal

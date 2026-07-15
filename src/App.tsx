@@ -16,7 +16,6 @@ function App() {
   // Lifted navigation state — persists across detail page navigations
   const [primaryTab, setPrimaryTab] = useState<PrimaryTab>("blockchain-transfer");
   const [secondaryTab, setSecondaryTab] = useState<SecondaryTab>("all");
-  const [page, setPage] = useState(1);
 
   return (
     <ToastProvider>
@@ -39,8 +38,6 @@ function App() {
             onPrimaryTabChange={setPrimaryTab}
             secondaryTab={secondaryTab}
             onSecondaryTabChange={setSecondaryTab}
-            page={page}
-            onPageChange={setPage}
           />
         )}
       </DashboardLayout>
