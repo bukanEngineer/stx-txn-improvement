@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { Sidebar, TopNavigation, DEFAULT_NAV_ITEMS } from "prohellox-designsystem";
 import "./DashboardLayout.css";
 
@@ -20,10 +20,11 @@ const COMPANY_ACTIONS = [
 
 interface DashboardLayoutProps {
   children: ReactNode;
+  activeNav: string;
+  onNavChange: (id: string) => void;
 }
 
-export function DashboardLayout({ children }: DashboardLayoutProps) {
-  const [activeNav, setActiveNav] = useState("history");
+export function DashboardLayout({ children, activeNav, onNavChange }: DashboardLayoutProps) {
 
   return (
     <div className="dashboard">
@@ -41,7 +42,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           active={activeNav}
           activeSubItem={undefined}
           hoveredItem={undefined}
-          onSelect={(id: string) => setActiveNav(id)}
+          onSelect={(id: string) => onNavChange(id)}
         />
       </aside>
 
