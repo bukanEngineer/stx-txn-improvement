@@ -21,7 +21,7 @@ import "./TransactionHistoryPage.css";
 
 const PAGE_SIZE = 10;
 
-type PrimaryTab = "bank-transfer" | "blockchain-transfer" | "swap" | "otc" | "funding";
+type PrimaryTab = "bank-transfer" | "blockchain-transfer" | "swap" | "otc" | "admin-transfer" | "payout";
 type SecondaryTab = "all" | "action-needed";
 
 interface TransactionHistoryPageProps {
@@ -79,18 +79,21 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string[]>([]);
   const [filterAsset, setFilterAsset] = useState<string[]>([]);
+  const [filterType, setFilterType] = useState<string[]>([]);
   const [filterDateFrom, setFilterDateFrom] = useState("");
   const [filterDateTo, setFilterDateTo] = useState("");
 
   // Temp filter state (for modal editing before applying)
   const [tempFilterStatus, setTempFilterStatus] = useState<string[]>([]);
   const [tempFilterAsset, setTempFilterAsset] = useState<string[]>([]);
+  const [tempFilterType, setTempFilterType] = useState<string[]>([]);
   const [tempFilterDateFrom, setTempFilterDateFrom] = useState("");
   const [tempFilterDateTo, setTempFilterDateTo] = useState("");
 
   const openFilterModal = () => {
     setTempFilterStatus([...filterStatus]);
     setTempFilterAsset([...filterAsset]);
+    setTempFilterType([...filterType]);
     setTempFilterDateFrom(filterDateFrom);
     setTempFilterDateTo(filterDateTo);
     setFilterModalOpen(true);
@@ -99,6 +102,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
   const applyFilter = () => {
     setFilterStatus(tempFilterStatus);
     setFilterAsset(tempFilterAsset);
+    setFilterType(tempFilterType);
     setFilterDateFrom(tempFilterDateFrom);
     setFilterDateTo(tempFilterDateTo);
     setFilterModalOpen(false);
@@ -108,11 +112,12 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
   const resetFilter = () => {
     setTempFilterStatus([]);
     setTempFilterAsset([]);
+    setTempFilterType([]);
     setTempFilterDateFrom("");
     setTempFilterDateTo("");
   };
 
-  const isFilterActive = filterStatus.length > 0 || filterAsset.length > 0 || filterDateFrom !== "" || filterDateTo !== "";
+  const isFilterActive = filterStatus.length > 0 || filterAsset.length > 0 || filterType.length > 0 || filterDateFrom !== "" || filterDateTo !== "";
 
   // Primary tabs
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -121,7 +126,8 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
     { id: "blockchain-transfer", label: "Blockchain Transfer" },
     { id: "swap", label: "Swap" },
     { id: "otc", label: "OTC" },
-    { id: "funding", label: "Funding (TBD)" },
+    { id: "admin-transfer", label: "Admin Transfer" },
+    { id: "payout", label: "Payout" },
   ];
 
   // Count of action-needed items (Pending + Processing)
@@ -169,6 +175,11 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       result = result.filter((row) => filterStatus.includes(row.status.label));
     }
 
+    // Apply transaction type filter
+    if (filterType.length > 0) {
+      result = result.filter((row) => filterType.includes(row.type));
+    }
+
     // Apply asset filter
     if (filterAsset.length > 0) {
       result = result.filter((row) =>
@@ -202,7 +213,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
     });
 
     return result;
-  }, [search, secondaryTab, sortOrder, filterStatus, filterAsset, filterDateFrom, filterDateTo]);
+  }, [search, secondaryTab, sortOrder, filterStatus, filterAsset, filterType, filterDateFrom, filterDateTo]);
 
   // Filter swap data (for swap tab — no secondary tab filtering)
   const filteredSwapData = useMemo<SwapTransactionRow[]>(() => {
@@ -338,6 +349,11 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       result = result.filter((row) => filterStatus.includes(row.status.label));
     }
 
+    // Apply transaction type filter
+    if (filterType.length > 0) {
+      result = result.filter((row) => filterType.includes(row.type));
+    }
+
     // Apply asset filter (currency for bank transfers)
     if (filterAsset.length > 0) {
       result = result.filter((row) => filterAsset.includes(row.currency));
@@ -367,7 +383,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
     });
 
     return result;
-  }, [search, secondaryTab, sortOrder, filterStatus, filterAsset, filterDateFrom, filterDateTo]);
+  }, [search, secondaryTab, sortOrder, filterStatus, filterAsset, filterType, filterDateFrom, filterDateTo]);
 
   // Infinite scroll — show visibleCount rows from the filtered data
   const activeData = primaryTab === "swap" ? filteredSwapData : primaryTab === "otc" ? filteredOtcData : primaryTab === "bank-transfer" ? filteredBankData : filteredData;
@@ -410,9 +426,13 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       title: "No OTC transactions",
       sub: "Your OTC transactions will appear here once you submit your first OTC request.",
     },
-    funding: {
-      title: "No Funding transactions",
-      sub: "This feature is coming soon. Your funding transactions will appear here.",
+    "admin-transfer": {
+      title: "No Admin Transfer transactions",
+      sub: "Your admin transfer transactions will appear here once you make your first transfer.",
+    },
+    payout: {
+      title: "No Payout transactions",
+      sub: "Your payout transactions will appear here once you make your first payout.",
     },
   };
 
@@ -1028,6 +1048,30 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
               id={undefined}
             />
           </div>
+          {(primaryTab === "bank-transfer" || primaryTab === "blockchain-transfer") && (
+            <div className="txn-filter__section">
+              <MultiSelect
+                label="Transaction Type"
+                helper={undefined}
+                error={undefined}
+                options={
+                  primaryTab === "bank-transfer"
+                    ? ([
+                        { value: "Bank Transfer In", label: "Bank Transfer In" },
+                        { value: "Bank Transfer Out", label: "Bank Transfer Out" },
+                      ] as any)
+                    : ([
+                        { value: "Blockchain Transfer In", label: "Blockchain Transfer In" },
+                        { value: "Blockchain Transfer Out", label: "Blockchain Transfer Out" },
+                      ] as any)
+                }
+                placeholder="Select transaction type"
+                value={tempFilterType}
+                onChange={(vals: string[]) => setTempFilterType(vals)}
+                id={undefined}
+              />
+            </div>
+          )}
           <div className="txn-filter__section">
             <MultiSelect
               label="Asset"

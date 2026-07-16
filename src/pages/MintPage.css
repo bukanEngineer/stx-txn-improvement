@@ -1,0 +1,361 @@
+.mint-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-height: calc(100vh - 72px - 64px - 60px);
+}
+
+.mint-page .page-title {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+/* ─── Mint Banner ─── */
+.mint-banner {
+  position: relative;
+  background: #002b2a;
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow: hidden;
+}
+
+.mint-banner__close {
+  all: unset;
+  cursor: pointer;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 24px;
+  height: 24px;
+  border-radius: 99px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.mint-banner__close .material-symbols-rounded {
+  font-size: 14px;
+  color: #002b2a;
+}
+
+.mint-banner__content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mint-banner__title {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #ffffff;
+  margin: 0;
+}
+
+.mint-banner__subtitle {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #ffffff;
+  margin: 0;
+}
+
+.mint-banner__link {
+  color: #00d37e;
+  text-decoration: underline;
+}
+
+.mint-banner__steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mint-banner__steps-label {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #ffffff;
+  margin: 0;
+}
+
+.mint-banner__steps-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.mint-banner__step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mint-banner__step-icon {
+  font-size: 24px;
+  color: #00d37e;
+}
+
+.mint-banner__step-text {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.mint-banner__step-arrow {
+  font-size: 24px;
+  color: #00d37e;
+}
+
+/* ─── Destination Wallet Card ─── */
+.dest-wallet {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dest-wallet__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px 16px;
+  border-bottom: 1px solid var(--base-color-line, #d8d8d8);
+}
+
+.dest-wallet__header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dest-wallet__title {
+  font-family: "Red Hat Display", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: #1b2736;
+  margin: 0;
+}
+
+.dest-wallet__subtitle {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #1b2736;
+  margin: 0;
+}
+
+.dest-wallet__setup-btn {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 99px;
+  background: #00d37e;
+  font-family: "Red Hat Display", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #002b2a;
+  white-space: nowrap;
+}
+
+.dest-wallet__setup-btn .material-symbols-rounded {
+  font-size: 20px;
+}
+
+.dest-wallet__item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 16px;
+}
+
+.dest-wallet__item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dest-wallet__wallet-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dest-wallet__wallet-label {
+  font-family: "Red Hat Display", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #002b2a;
+}
+
+.dest-wallet__wallet-address {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: #505454;
+}
+
+.dest-wallet__wallet-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dest-wallet__meta-label {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: #505454;
+}
+
+.dest-wallet__meta-value {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #505454;
+}
+
+.dest-wallet__arrow-btn {
+  all: unset;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 99px;
+  border: 1px solid var(--base-color-line, #d8d8d8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dest-wallet__arrow-btn .material-symbols-rounded {
+  font-size: 20px;
+  color: #505454;
+}
+
+.mint-page__card {
+  background: var(--surface-surface-neutral, #ffffff);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+/* Toolbar */
+.mint-page__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.mint-page__label {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary, #1a1a1a);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.mint-page__toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mint-page__search {
+  width: 260px;
+}
+
+/* Cell styles */
+.mint-page__cell-id {
+  color: var(--base-color-link, #187d97);
+  font-family: inherit;
+  font-size: inherit;
+  white-space: nowrap;
+}
+
+.mint-page__cell-amount {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.mint-page__cell-wallet {
+  font-family: monospace;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* Copy cell */
+.mint-page__copy-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mint-page__copy-btn {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  color: var(--text-tertiary, #999);
+}
+
+.mint-page__copy-btn:hover {
+  color: var(--text-primary, #333);
+  background: var(--surface-surface-secondary, #f6f7f9);
+}
+
+.mint-page__copy-btn .material-symbols-rounded {
+  font-size: 16px;
+}
+
+/* Filter Modal */
+.mint-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mint-filter__section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mint-filter-modal.modal {
+  overflow: visible;
+}
+
+.mint-filter-modal .modal__body {
+  overflow: visible;
+}
+
+.mint-filter-modal .modal__foot {
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}

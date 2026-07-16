@@ -1,0 +1,113 @@
+export interface MintTransactionRow {
+  id: string;
+  fullId: string;
+  date: string;
+  netAmount: number;
+  currency: string;
+  wallet: string;
+  network: string;
+  status: { label: string; tone: string };
+}
+
+export const MOCK_MINT_TRANSACTIONS: MintTransactionRow[] = [
+  {
+    id: "801...aa123",
+    fullId: "801d4e5f-6a78-9b0c-d1e2-f3a4b5c6aa123",
+    date: "22 Oct 2024, 14:30",
+    netAmount: 100000,
+    currency: "XSGD",
+    wallet: "0x1a2b3c4d5e6f7a....b8c9d",
+    network: "Ethereum",
+    status: { label: "Completed", tone: "positive" },
+  },
+  {
+    id: "802...bb234",
+    fullId: "802e5f6a-7b89-0c1d-e2f3-a4b5c6d7bb234",
+    date: "21 Oct 2024, 10:15",
+    netAmount: 50000,
+    currency: "XUSD",
+    wallet: "0x2b3c4d5e6f7a8b....c9d0e",
+    network: "Polygon",
+    status: { label: "Processing", tone: "info" },
+  },
+  {
+    id: "803...cc345",
+    fullId: "803f6a7b-8c90-1d2e-f3a4-b5c6d7e8cc345",
+    date: "20 Oct 2024, 17:45",
+    netAmount: 250000,
+    currency: "XSGD",
+    wallet: "0x3c4d5e6f7a8b9c....d0e1f",
+    network: "Ethereum",
+    status: { label: "Completed", tone: "positive" },
+  },
+  {
+    id: "804...dd456",
+    fullId: "804a7b8c-9d01-2e3f-a4b5-c6d7e8f9dd456",
+    date: "19 Oct 2024, 09:00",
+    netAmount: 75000,
+    currency: "XUSD",
+    wallet: "0x4d5e6f7a8b9c0d....e1f2a",
+    network: "Polygon",
+    status: { label: "Pending", tone: "warning" },
+  },
+  {
+    id: "805...ee567",
+    fullId: "805b8c9d-0e12-3f4a-b5c6-d7e8f9a0ee567",
+    date: "18 Oct 2024, 13:20",
+    netAmount: 500000,
+    currency: "XSGD",
+    wallet: "0x5e6f7a8b9c0d1e....f2a3b",
+    network: "Zilliqa",
+    status: { label: "Completed", tone: "positive" },
+  },
+  {
+    id: "806...ff678",
+    fullId: "806c9d0e-1f23-4a5b-c6d7-e8f9a0b1ff678",
+    date: "17 Oct 2024, 16:50",
+    netAmount: 30000,
+    currency: "XSGD",
+    wallet: "0x6f7a8b9c0d1e2f....a3b4c",
+    network: "Ethereum",
+    status: { label: "Completed", tone: "positive" },
+  },
+  {
+    id: "807...aa789",
+    fullId: "807d0e1f-2a34-5b6c-d7e8-f9a0b1c2aa789",
+    date: "16 Oct 2024, 11:10",
+    netAmount: 120000,
+    currency: "XUSD",
+    wallet: "0x7a8b9c0d1e2f3a....b4c5d",
+    network: "Polygon",
+    status: { label: "Failed", tone: "critical" },
+  },
+  {
+    id: "808...bb890",
+    fullId: "808e1f2a-3b45-6c7d-e8f9-a0b1c2d3bb890",
+    date: "15 Oct 2024, 08:35",
+    netAmount: 200000,
+    currency: "XSGD",
+    wallet: "0x8b9c0d1e2f3a4b....c5d6e",
+    network: "Ethereum",
+    status: { label: "Completed", tone: "positive" },
+  },
+  {
+    id: "809...cc901",
+    fullId: "809f2a3b-4c56-7d8e-f9a0-b1c2d3e4cc901",
+    date: "14 Oct 2024, 15:25",
+    netAmount: 45000,
+    currency: "XSGD",
+    wallet: "0x9c0d1e2f3a4b5c....d6e7f",
+    network: "Zilliqa",
+    status: { label: "Processing", tone: "info" },
+  },
+  {
+    id: "810...dd012",
+    fullId: "810a3b4c-5d67-8e9f-a0b1-c2d3e4f5dd012",
+    date: "13 Oct 2024, 12:00",
+    netAmount: 80000,
+    currency: "XUSD",
+    wallet: "0x0d1e2f3a4b5c6d....e7f8a",
+    network: "Polygon",
+    status: { label: "Completed", tone: "positive" },
+  },
+];
