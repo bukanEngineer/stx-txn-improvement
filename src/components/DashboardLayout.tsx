@@ -1,5 +1,6 @@
-import { type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Sidebar, TopNavigation, DEFAULT_NAV_ITEMS } from "prohellox-designsystem";
+import { useIsMobile } from "../hooks/useMediaQuery";
 import "./DashboardLayout.css";
 
 const HIDDEN_NAV_IDS = ["statement", "devtools", "team", "settings"];
@@ -25,10 +26,46 @@ interface DashboardLayoutProps {
 }
 
 export function DashboardLayout({ children, activeNav, onNavChange }: DashboardLayoutProps) {
+  const isMobile = useIsMobile();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isMobile) {
+      setSidebarOpen(false);
+    }
+  }, [isMobile]);
+
+  useEffect(() => {
+    if (!isMobile || !sidebarOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [isMobile, sidebarOpen]);
+
+  const handleNavSelect = (id: string) => {
+    onNavChange(id);
+    if (isMobile) {
+      setSidebarOpen(false);
+    }
+  };
 
   return (
-    <div className="dashboard">
-      <aside className="dashboard__sidebar">
+    <div className={`dashboard${isMobile && sidebarOpen ? " dashboard--sidebar-open" : ""}`}>
+      {isMobile && sidebarOpen && (
+        <button
+          type="button"
+          className="dashboard__backdrop"
+          aria-label="Close navigation"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      <aside
+        className={`dashboard__sidebar${isMobile && sidebarOpen ? " dashboard__sidebar--open" : ""}`}
+        aria-hidden={isMobile && !sidebarOpen ? true : undefined}
+      >
         <Sidebar
           account="business"
           company={{ name: "Acme Corp", type: "Business Account" }}
@@ -42,7 +79,7 @@ export function DashboardLayout({ children, activeNav, onNavChange }: DashboardL
           active={activeNav}
           activeSubItem={undefined}
           hoveredItem={undefined}
-          onSelect={(id: string) => onNavChange(id)}
+          onSelect={handleNavSelect}
         />
       </aside>
 
@@ -54,7 +91,11 @@ export function DashboardLayout({ children, activeNav, onNavChange }: DashboardL
             notifications={3}
             onNotificationsClick={() => {}}
             onMenuAction={() => {}}
-            onMenuClick={() => {}}
+            onMenuClick={() => {
+              if (isMobile) {
+                setSidebarOpen((open) => !open);
+              }
+            }}
           >
             {undefined}
           </TopNavigation>

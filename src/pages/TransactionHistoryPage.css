@@ -23,6 +23,18 @@
   flex: 1;
 }
 
+/* TransferPanel.css in prohellox-designsystem leaks a global
+   `.tabs { border-bottom }` that doubles the Tabs strip divider.
+   Drop the leaked border and stretch the strip so its divider
+   spans the full card width (strip is content-sized by default). */
+.txn-page__card > .tabs {
+  border-bottom: none;
+}
+
+.txn-page__card > .tabs .tabs__strip {
+  width: 100%;
+}
+
 /* Toolbar row: secondary tabs left, search + buttons right */
 .txn-page__toolbar {
   display: flex;
@@ -177,4 +189,51 @@
 
 .txn-filter-modal .modal__foot {
   border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+@media (max-width: 1023px) {
+  .txn-page {
+    gap: 16px;
+  }
+
+  .txn-page__card {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  /* Scroll the Tabs root only — `[class*="tabs"]` also matched
+     `.tabs__strip` / `.tabs__tab` and clipped the active underline
+     (`::after { bottom: -1px }`) that sits over the strip border. */
+  .txn-page__card > .tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .txn-page__toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .txn-page__secondary-tabs {
+    width: 100%;
+    max-height: none;
+    justify-content: stretch;
+  }
+
+  .txn-page__sec-tab {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .txn-page__toolbar-actions {
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+
+  .txn-page__search {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+  }
 }

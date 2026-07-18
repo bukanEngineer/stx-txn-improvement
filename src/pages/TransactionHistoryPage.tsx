@@ -17,6 +17,8 @@ import {
 } from "prohellox-designsystem";
 import { MOCK_BLOCKCHAIN_TRANSFER, MOCK_SWAP_TRANSACTIONS, MOCK_BANK_TRANSFER, MOCK_OTC_TRANSACTIONS } from "../data/mockTransactions";
 import type { TransactionRow, SwapTransactionRow, BankTransferRow } from "../data/mockTransactions";
+import { useIsMobile } from "../hooks/useMediaQuery";
+import { BlockchainMobileList, BankMobileList, SwapMobileList } from "../components/TransactionMobileList";
 import "./TransactionHistoryPage.css";
 
 const PAGE_SIZE = 10;
@@ -66,6 +68,7 @@ function CopyCell({ value, children, className }: { value: string; children: Rea
 }
 
 export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransfer, primaryTab, onPrimaryTabChange, secondaryTab, onSecondaryTabChange }: TransactionHistoryPageProps) {
+  const isMobile = useIsMobile();
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
   const [modalOpen, setModalOpen] = useState(false);
@@ -499,7 +502,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
     {
       key: "status",
       header: "Status",
-      fixed: secondaryTab === "action-needed" ? "right" : undefined,
+      fixed: "right",
       render: (row: TransactionRow) =>
         secondaryTab === "action-needed" ? (
           <Button
@@ -564,6 +567,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
     {
       key: "status",
       header: "Status",
+      fixed: "right",
       render: (row: SwapTransactionRow) => (
         <Tag tone={row.status.tone} icon={undefined} onRemove={undefined} onClick={undefined}>
           {row.status.label}
@@ -616,6 +620,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
     {
       key: "status",
       header: "Status",
+      fixed: "right",
       render: (row: SwapTransactionRow) => (
         <Tag tone={row.status.tone} icon={undefined} onRemove={undefined} onClick={undefined}>
           {row.status.label}
@@ -680,7 +685,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
     {
       key: "status",
       header: "Status",
-      fixed: secondaryTab === "action-needed" ? "right" : undefined,
+      fixed: "right",
       render: (row: BankTransferRow) =>
         secondaryTab === "action-needed" ? (
           <Button
@@ -759,26 +764,35 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
               </div>
             </div>
 
-            {/* Swap Table */}
-            <Table
-              columns={swapColumns as any}
-              rows={visibleData as any}
-              empty="No transactions found."
-              scrollX={undefined}
-              scrollY={480}
-              sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
-              onSortChange={(sortState: { key: string; direction: "asc" | "desc" } | null) => {
-                if (sortState && sortState.key === "date") {
-                  setSortOrder(sortState.direction === "desc" ? "newest" : "oldest");
-                } else {
-                  setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
-                }
-              }}
-              onLoadMore={handleLoadMore}
-              hasMore={hasMore}
-              loading={loading}
-              endLabel={`All ${activeData.length} data already shown`}
-            />
+            {isMobile ? (
+              <SwapMobileList
+                rows={visibleData as SwapTransactionRow[]}
+                hasMore={hasMore}
+                loading={loading}
+                onLoadMore={handleLoadMore}
+                endLabel={`All ${activeData.length} data already shown`}
+              />
+            ) : (
+              <Table
+                columns={swapColumns as any}
+                rows={visibleData as any}
+                empty="No transactions found."
+                scrollX={900}
+                scrollY={480}
+                sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
+                onSortChange={(sortState: { key: string; direction: "asc" | "desc" } | null) => {
+                  if (sortState && sortState.key === "date") {
+                    setSortOrder(sortState.direction === "desc" ? "newest" : "oldest");
+                  } else {
+                    setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
+                  }
+                }}
+                onLoadMore={handleLoadMore}
+                hasMore={hasMore}
+                loading={loading}
+                endLabel={`All ${activeData.length} data already shown`}
+              />
+            )}
           </>
         ) : primaryTab === "otc" ? (
           <>
@@ -814,26 +828,36 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
               </div>
             </div>
 
-            {/* OTC Table */}
-            <Table
-              columns={otcColumns as any}
-              rows={visibleData as any}
-              empty="No transactions found."
-              scrollX={undefined}
-              scrollY={480}
-              sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
-              onSortChange={(sortState: { key: string; direction: "asc" | "desc" } | null) => {
-                if (sortState && sortState.key === "date") {
-                  setSortOrder(sortState.direction === "desc" ? "newest" : "oldest");
-                } else {
-                  setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
-                }
-              }}
-              onLoadMore={handleLoadMore}
-              hasMore={hasMore}
-              loading={loading}
-              endLabel={`All ${activeData.length} data already shown`}
-            />
+            {isMobile ? (
+              <SwapMobileList
+                rows={visibleData as SwapTransactionRow[]}
+                showFullId
+                hasMore={hasMore}
+                loading={loading}
+                onLoadMore={handleLoadMore}
+                endLabel={`All ${activeData.length} data already shown`}
+              />
+            ) : (
+              <Table
+                columns={otcColumns as any}
+                rows={visibleData as any}
+                empty="No transactions found."
+                scrollX={900}
+                scrollY={480}
+                sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
+                onSortChange={(sortState: { key: string; direction: "asc" | "desc" } | null) => {
+                  if (sortState && sortState.key === "date") {
+                    setSortOrder(sortState.direction === "desc" ? "newest" : "oldest");
+                  } else {
+                    setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
+                  }
+                }}
+                onLoadMore={handleLoadMore}
+                hasMore={hasMore}
+                loading={loading}
+                endLabel={`All ${activeData.length} data already shown`}
+              />
+            )}
           </>
         ) : primaryTab === "bank-transfer" ? (
           <>
@@ -887,26 +911,41 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
               </div>
             </div>
 
-            {/* Bank Transfer Table */}
-            <Table
-              columns={bankColumns as any}
-              rows={visibleData as any}
-              empty="No transactions found."
-              scrollX={secondaryTab === "action-needed" ? 900 : undefined}
-              scrollY={480}
-              sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
-              onSortChange={(sortState: { key: string; direction: "asc" | "desc" } | null) => {
-                if (sortState && sortState.key === "date") {
-                  setSortOrder(sortState.direction === "desc" ? "newest" : "oldest");
-                } else {
-                  setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
-                }
-              }}
-              onLoadMore={handleLoadMore}
-              hasMore={hasMore}
-              loading={loading}
-              endLabel={`All ${activeData.length} data already shown`}
-            />
+            {isMobile ? (
+              <BankMobileList
+                rows={visibleData as BankTransferRow[]}
+                actionNeeded={secondaryTab === "action-needed"}
+                onSelect={onSelectBankTransfer}
+                onConfirm={(row) => {
+                  setModalTransaction(row as unknown as TransactionRow);
+                  setModalOpen(true);
+                }}
+                hasMore={hasMore}
+                loading={loading}
+                onLoadMore={handleLoadMore}
+                endLabel={`All ${activeData.length} data already shown`}
+              />
+            ) : (
+              <Table
+                columns={bankColumns as any}
+                rows={visibleData as any}
+                empty="No transactions found."
+                scrollX={900}
+                scrollY={480}
+                sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
+                onSortChange={(sortState: { key: string; direction: "asc" | "desc" } | null) => {
+                  if (sortState && sortState.key === "date") {
+                    setSortOrder(sortState.direction === "desc" ? "newest" : "oldest");
+                  } else {
+                    setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
+                  }
+                }}
+                onLoadMore={handleLoadMore}
+                hasMore={hasMore}
+                loading={loading}
+                endLabel={`All ${activeData.length} data already shown`}
+              />
+            )}
           </>
         ) : (
           <>
@@ -960,27 +999,42 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
               </div>
             </div>
 
-            {/* Table */}
-            <Table
-              columns={columns as any}
-              rows={visibleData as any}
-              empty="No transactions found."
-              scrollX={secondaryTab === "action-needed" ? 900 : undefined}
-              scrollY={480}
-              sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
-              onSortChange={(sortState: { key: string; direction: "asc" | "desc" } | null) => {
-                if (sortState && sortState.key === "date") {
-                  setSortOrder(sortState.direction === "desc" ? "newest" : "oldest");
-                } else {
-                  // When sort is cleared (null), toggle to the opposite direction
-                  setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
-                }
-              }}
-              onLoadMore={handleLoadMore}
-              hasMore={hasMore}
-              loading={loading}
-              endLabel={`All ${activeData.length} data already shown`}
-            />
+            {isMobile ? (
+              <BlockchainMobileList
+                rows={visibleData as TransactionRow[]}
+                actionNeeded={secondaryTab === "action-needed"}
+                onSelect={onSelectTransaction}
+                onConfirm={(row) => {
+                  setModalTransaction(row);
+                  setModalOpen(true);
+                }}
+                hasMore={hasMore}
+                loading={loading}
+                onLoadMore={handleLoadMore}
+                endLabel={`All ${activeData.length} data already shown`}
+              />
+            ) : (
+              <Table
+                columns={columns as any}
+                rows={visibleData as any}
+                empty="No transactions found."
+                scrollX={900}
+                scrollY={480}
+                sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
+                onSortChange={(sortState: { key: string; direction: "asc" | "desc" } | null) => {
+                  if (sortState && sortState.key === "date") {
+                    setSortOrder(sortState.direction === "desc" ? "newest" : "oldest");
+                  } else {
+                    // When sort is cleared (null), toggle to the opposite direction
+                    setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
+                  }
+                }}
+                onLoadMore={handleLoadMore}
+                hasMore={hasMore}
+                loading={loading}
+                endLabel={`All ${activeData.length} data already shown`}
+              />
+            )}
           </>
         )}
       </div>

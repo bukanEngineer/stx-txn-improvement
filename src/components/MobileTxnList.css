@@ -1,0 +1,118 @@
+.mobile-txn-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mobile-txn-card {
+  background: var(--surface-surface-secondary, #f6f7f9);
+  border: 1px solid var(--base-color-line, #d8d8d8);
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mobile-txn-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mobile-txn-card__id {
+  all: unset;
+  cursor: pointer;
+  color: var(--base-color-link, #187d97);
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  word-break: break-all;
+}
+
+.mobile-txn-card__id:hover {
+  text-decoration: underline;
+}
+
+.mobile-txn-card__id-text {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--base-color-on-neutral, #002b2a);
+  word-break: break-all;
+}
+
+.mobile-txn-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mobile-txn-card__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mobile-txn-card__label {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 12px;
+  color: var(--base-color-on-neutral-secondary, #505454);
+  flex-shrink: 0;
+}
+
+.mobile-txn-card__value {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 14px;
+  color: var(--base-color-on-neutral, #002b2a);
+  text-align: right;
+  word-break: break-word;
+}
+
+.mobile-txn-card__value--bold {
+  font-weight: 700;
+}
+
+.mobile-txn-card__value--mono {
+  font-family: monospace;
+  font-size: 13px;
+}
+
+.mobile-txn-card__network {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: flex-end;
+}
+
+.mobile-txn-card__footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 4px;
+  border-top: 1px solid var(--base-color-line, #d8d8d8);
+}
+
+.mobile-txn-list__empty {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 14px;
+  color: var(--base-color-on-neutral-secondary, #505454);
+  text-align: center;
+  padding: 32px 16px;
+}
+
+.mobile-txn-list__footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-top: 8px;
+}
+
+.mobile-txn-list__end {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 13px;
+  color: var(--base-color-on-neutral-secondary, #505454);
+  text-align: center;
+}

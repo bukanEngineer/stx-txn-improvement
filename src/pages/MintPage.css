@@ -307,6 +307,16 @@
   white-space: nowrap;
 }
 
+/* Force table cells to stay single line */
+.mint-page__card .table-wrap {
+  overflow-x: auto;
+}
+
+.mint-page__card .table td,
+.mint-page__card .table th {
+  white-space: nowrap;
+}
+
 /* Copy cell */
 .mint-page__copy-cell {
   display: inline-flex;
@@ -358,4 +368,76 @@
 
 .mint-filter-modal .modal__foot {
   border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+@media (max-width: 1023px) {
+  .mint-page {
+    gap: 16px;
+  }
+
+  .mint-banner {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .mint-banner__steps-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .mint-banner__step-arrow {
+    display: none;
+  }
+
+  .mint-banner__step-text {
+    white-space: normal;
+  }
+
+  .dest-wallet {
+    padding: 16px 0;
+    gap: 16px;
+  }
+
+  .dest-wallet__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 0 16px 16px;
+  }
+
+  .dest-wallet__setup-btn {
+    align-self: flex-start;
+  }
+
+  .dest-wallet__item {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .dest-wallet__wallet-meta {
+    flex-wrap: wrap;
+  }
+
+  .mint-page__card {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .mint-page__toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .mint-page__toolbar-actions {
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+
+  .mint-page__search {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+  }
 }

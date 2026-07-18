@@ -15,6 +15,8 @@ import {
 } from "prohellox-designsystem";
 import { MOCK_MINT_TRANSACTIONS } from "../data/mockMintTransactions";
 import type { MintTransactionRow } from "../data/mockMintTransactions";
+import { useIsMobile } from "../hooks/useMediaQuery";
+import { MintMobileList } from "../components/MintMobileList";
 import "./MintPage.css";
 
 /* ─── Mint Banner ─── */
@@ -132,6 +134,7 @@ function CopyCell({ value, children, className }: { value: string; children: Rea
 }
 
 export function MintPage() {
+  const isMobile = useIsMobile();
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
@@ -291,6 +294,7 @@ export function MintPage() {
     {
       key: "status",
       header: "Status",
+      fixed: "right",
       render: (row: MintTransactionRow) => (
         <Tag tone={row.status.tone} icon={undefined} onRemove={undefined} onClick={undefined}>
           {row.status.label}
@@ -349,25 +353,35 @@ export function MintPage() {
           </div>
         </div>
 
-        <Table
-          columns={columns as any}
-          rows={visibleData as any}
-          empty="No mint transactions found."
-          scrollX={undefined}
-          scrollY={480}
-          sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
-          onSortChange={(sortState: { key: string; direction: "asc" | "desc" } | null) => {
-            if (sortState && sortState.key === "date") {
-              setSortOrder(sortState.direction === "desc" ? "newest" : "oldest");
-            } else {
-              setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
-            }
-          }}
-          onLoadMore={handleLoadMore}
-          hasMore={hasMore}
-          loading={loading}
-          endLabel={`All ${filteredData.length} data already shown`}
-        />
+        {isMobile ? (
+          <MintMobileList
+            rows={visibleData}
+            hasMore={hasMore}
+            loading={loading}
+            onLoadMore={handleLoadMore}
+            endLabel={`All ${filteredData.length} data already shown`}
+          />
+        ) : (
+          <Table
+            columns={columns as any}
+            rows={visibleData as any}
+            empty="No mint transactions found."
+            scrollX={900}
+            scrollY={480}
+            sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
+            onSortChange={(sortState: { key: string; direction: "asc" | "desc" } | null) => {
+              if (sortState && sortState.key === "date") {
+                setSortOrder(sortState.direction === "desc" ? "newest" : "oldest");
+              } else {
+                setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
+              }
+            }}
+            onLoadMore={handleLoadMore}
+            hasMore={hasMore}
+            loading={loading}
+            endLabel={`All ${filteredData.length} data already shown`}
+          />
+        )}
       </div>
 
       {/* Filter Modal */}
