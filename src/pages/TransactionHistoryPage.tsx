@@ -10,7 +10,7 @@ import {
   EmptyState,
   Modal,
   Badge,
-  AssetMark,
+  PartnerLogo,
   MultiSelect,
   DateInput,
   useToast,
@@ -494,8 +494,8 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       key: "network",
       header: "Network",
       render: (row: TransactionRow) => (
-        <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
-          <AssetMark asset={row.network} size={20} label={row.network.slice(0, 1)} color={undefined} children={undefined} />
+        <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <PartnerLogo name={row.network.toLowerCase()} size={20} style={undefined} />
           {row.network}
         </span>
       ),
@@ -1146,10 +1146,10 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
               options={[
                 { value: "SGD", label: "SGD" },
                 { value: "USD", label: "USD" },
-                { value: "XSGD", label: "XSGD" },
-                { value: "XUSD", label: "XUSD" },
-                { value: "USDC", label: "USDC" },
-                { value: "USDT", label: "USDT" },
+                { value: "XSGD", label: <span style={{ display: "flex", alignItems: "center", gap: 6 }}><PartnerLogo name="xsgd" size={18} style={undefined} />XSGD</span> },
+                { value: "XUSD", label: <span style={{ display: "flex", alignItems: "center", gap: 6 }}><PartnerLogo name="xusd" size={18} style={undefined} />XUSD</span> },
+                { value: "USDC", label: <span style={{ display: "flex", alignItems: "center", gap: 6 }}><PartnerLogo name="usdc" size={18} style={undefined} />USDC</span> },
+                { value: "USDT", label: <span style={{ display: "flex", alignItems: "center", gap: 6 }}><PartnerLogo name="usdt" size={18} style={undefined} />USDT</span> },
               ] as any}
               placeholder="Select asset"
               value={tempFilterAsset}

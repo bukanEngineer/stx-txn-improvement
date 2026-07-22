@@ -8,6 +8,7 @@ import {
   Icon,
   Badge,
   AssetMark,
+  PartnerLogo,
   Modal,
   MultiSelect,
   DateInput,
@@ -87,7 +88,7 @@ function DestinationWallet() {
             <AssetMark asset="XSGD" size={16} label="X" color={undefined} children={undefined} />
             <span className="dest-wallet__meta-value">XSGD</span>
             <span className="dest-wallet__meta-label" style={{ marginLeft: 12 }}>Network:</span>
-            <AssetMark asset="Arbitrum" size={16} label="A" color={undefined} children={undefined} />
+            <PartnerLogo name="arbitrum" size={16} style={undefined} />
             <span className="dest-wallet__meta-value">Arbitrum</span>
           </div>
         </div>
@@ -290,8 +291,8 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
       key: "network",
       header: "Network",
       render: (row: MintTransactionRow) => (
-        <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
-          <AssetMark asset={row.network} size={20} label={row.network.slice(0, 1)} color={undefined} children={undefined} />
+        <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <PartnerLogo name={row.network.toLowerCase()} size={20} style={undefined} />
           {row.network}
         </span>
       ),
@@ -435,8 +436,8 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
               helper={undefined}
               error={undefined}
               options={[
-                { value: "XSGD", label: "XSGD" },
-                { value: "XUSD", label: "XUSD" },
+                { value: "XSGD", label: <span style={{ display: "flex", alignItems: "center", gap: 6 }}><PartnerLogo name="xsgd" size={18} style={undefined} />XSGD</span> },
+                { value: "XUSD", label: <span style={{ display: "flex", alignItems: "center", gap: 6 }}><PartnerLogo name="xusd" size={18} style={undefined} />XUSD</span> },
               ] as any}
               placeholder="Select asset"
               value={tempFilterAsset}

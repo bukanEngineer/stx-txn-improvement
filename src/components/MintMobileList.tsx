@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Tag, AssetMark, useToast } from "prohellox-designsystem";
+import { Button, Tag, PartnerLogo, useToast } from "prohellox-designsystem";
 import type { MintTransactionRow } from "../data/mockMintTransactions";
 import "./MobileTxnList.css";
 
@@ -89,7 +89,7 @@ export function MintMobileList({
             <div className="mobile-txn-card__row">
               <span className="mobile-txn-card__label">Network</span>
               <span className="mobile-txn-card__value mobile-txn-card__network">
-                <AssetMark asset={row.network} size={20} label={row.network.slice(0, 1)} color={undefined} children={undefined} />
+                <PartnerLogo name={row.network.toLowerCase()} size={20} style={undefined} />
                 {row.network}
               </span>
             </div>

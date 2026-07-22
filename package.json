@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "prohellox-designsystem": "^0.6.0",
+    "prohellox-designsystem": "^0.7.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

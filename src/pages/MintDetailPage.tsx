@@ -1,4 +1,4 @@
-import { Tag, Icon, useToast } from "prohellox-designsystem";
+import { Tag, Icon, PartnerLogo, useToast } from "prohellox-designsystem";
 import type { MintTransactionRow } from "../data/mockMintTransactions";
 import "./MintDetailPage.css";
 
@@ -106,7 +106,10 @@ export function MintDetailPage({ transaction, onBack }: MintDetailPageProps) {
             </div>
             <div className="mint-detail__field">
               <span className="mint-detail__label">Network</span>
-              <span className="mint-detail__value">{transaction.network}</span>
+              <span className="mint-detail__value" style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <PartnerLogo name={transaction.network.toLowerCase()} size={20} style={undefined} />
+                {transaction.network}
+              </span>
             </div>
           </div>
 

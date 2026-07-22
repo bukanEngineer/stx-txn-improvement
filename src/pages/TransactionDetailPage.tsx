@@ -1,4 +1,4 @@
-import { Tag, Icon, useToast } from "prohellox-designsystem";
+import { Tag, Icon, PartnerLogo, useToast } from "prohellox-designsystem";
 import type { TransactionRow } from "../data/mockTransactions";
 import "./TransactionDetailPage.css";
 
@@ -106,7 +106,10 @@ export function TransactionDetailPage({ transaction, onBack }: TransactionDetail
             </div>
             <div className="txn-detail__field">
               <span className="txn-detail__label">Network</span>
-              <span className="txn-detail__value">{transaction.network}</span>
+              <span className="txn-detail__value" style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <PartnerLogo name={transaction.network.toLowerCase()} size={20} style={undefined} />
+                {transaction.network}
+              </span>
             </div>
           </div>
 
