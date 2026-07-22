@@ -795,7 +795,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 hasMore={hasMore}
                 loading={loading}
                 endLabel={`All ${activeData.length} data already shown`}
-                timezone="Asia/Singapore"
+                timezone={Intl.DateTimeFormat().resolvedOptions().timeZone}
                 showTimezone
               />
             )}
@@ -862,7 +862,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 hasMore={hasMore}
                 loading={loading}
                 endLabel={`All ${activeData.length} data already shown`}
-                timezone="Asia/Singapore"
+                timezone={Intl.DateTimeFormat().resolvedOptions().timeZone}
                 showTimezone
               />
             )}
@@ -952,7 +952,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 hasMore={hasMore}
                 loading={loading}
                 endLabel={`All ${activeData.length} data already shown`}
-                timezone="Asia/Singapore"
+                timezone={Intl.DateTimeFormat().resolvedOptions().timeZone}
                 showTimezone
               />
             )}
@@ -1043,7 +1043,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 hasMore={hasMore}
                 loading={loading}
                 endLabel={`All ${activeData.length} data already shown`}
-                timezone="Asia/Singapore"
+                timezone={Intl.DateTimeFormat().resolvedOptions().timeZone}
                 showTimezone
               />
             )}

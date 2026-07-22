@@ -386,7 +386,7 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
             hasMore={hasMore}
             loading={loading}
             endLabel={`All ${filteredData.length} data already shown`}
-            timezone="Asia/Singapore"
+            timezone={Intl.DateTimeFormat().resolvedOptions().timeZone}
             showTimezone
           />
         )}
