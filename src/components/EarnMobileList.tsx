@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Button, Tag, AssetMark, useToast } from "prohellox-designsystem";
-import type { MintTransactionRow } from "../data/mockMintTransactions";
+import { Button, Tag, useToast } from "prohellox-designsystem";
+import type { EarnTransactionRow } from "../data/mockEarnTransactions";
 import "./MobileTxnList.css";
 
 function CopyButton({ value }: { value: string }) {
@@ -21,7 +21,7 @@ function CopyButton({ value }: { value: string }) {
   return (
     <button
       type="button"
-      className="mint-page__copy-btn"
+      className="earn-page__copy-btn"
       onClick={handleCopy}
       aria-label={copied ? "Copied" : "Copy"}
     >
@@ -32,33 +32,40 @@ function CopyButton({ value }: { value: string }) {
   );
 }
 
-interface MintMobileListProps {
-  rows: MintTransactionRow[];
+interface EarnMobileListProps {
+  rows: EarnTransactionRow[];
   hasMore: boolean;
   loading: boolean;
   onLoadMore: () => void;
-  onSelect?: (row: MintTransactionRow) => void;
   endLabel: string;
+  onSelect: (row: EarnTransactionRow) => void;
 }
 
-export function MintMobileList({
+export function EarnMobileList({
   rows,
   hasMore,
   loading,
   onLoadMore,
-  onSelect,
   endLabel,
-}: MintMobileListProps) {
+  onSelect,
+}: EarnMobileListProps) {
   if (rows.length === 0) {
-    return <div className="mobile-txn-list__empty">No mint transactions found.</div>;
+    return <div className="mobile-txn-list__empty">No earn transactions found.</div>;
   }
 
   return (
     <div className="mobile-txn-list">
       {rows.map((row) => (
-        <article key={row.fullId} className="mobile-txn-card" onClick={() => onSelect?.(row)} style={{ cursor: onSelect ? "pointer" : undefined }}>
+        <article
+          key={row.fullId}
+          className="mobile-txn-card mobile-txn-card--clickable"
+          onClick={() => onSelect(row)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onSelect(row); }}
+        >
           <div className="mobile-txn-card__header">
-            <span className="mint-page__copy-cell">
+            <span className="earn-page__copy-cell">
               <span className="mobile-txn-card__id-text">{row.id}</span>
               <CopyButton value={row.fullId} />
             </span>
@@ -68,6 +75,10 @@ export function MintMobileList({
           </div>
           <div className="mobile-txn-card__meta">
             <div className="mobile-txn-card__row">
+              <span className="mobile-txn-card__label">Type</span>
+              <span className="mobile-txn-card__value">{row.type}</span>
+            </div>
+            <div className="mobile-txn-card__row">
               <span className="mobile-txn-card__label">Net Amount</span>
               <span className="mobile-txn-card__value mobile-txn-card__value--bold">
                 {row.netAmount.toLocaleString()} {row.currency}
@@ -76,22 +87,6 @@ export function MintMobileList({
             <div className="mobile-txn-card__row">
               <span className="mobile-txn-card__label">Date</span>
               <span className="mobile-txn-card__value">{row.date}</span>
-            </div>
-            <div className="mobile-txn-card__row">
-              <span className="mobile-txn-card__label">Wallet</span>
-              <span className="mobile-txn-card__value mobile-txn-card__value--mono mint-page__copy-cell">
-                {row.wallet.length > 12
-                  ? row.wallet.slice(0, 6) + "…" + row.wallet.slice(-5)
-                  : row.wallet}
-                <CopyButton value={row.wallet} />
-              </span>
-            </div>
-            <div className="mobile-txn-card__row">
-              <span className="mobile-txn-card__label">Network</span>
-              <span className="mobile-txn-card__value mobile-txn-card__network">
-                <AssetMark asset={row.network} size={20} label={row.network.slice(0, 1)} color={undefined} children={undefined} />
-                {row.network}
-              </span>
             </div>
           </div>
         </article>

@@ -1,0 +1,163 @@
+.earn-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-height: calc(100vh - 72px - 64px - 60px);
+}
+
+.earn-page .page-title {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.earn-page__card {
+  background: var(--surface-surface-neutral, #ffffff);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+/* Toolbar */
+.earn-page__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.earn-page__label {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary, #1a1a1a);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.earn-page__toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.earn-page__search {
+  width: 260px;
+}
+
+/* Cell styles */
+.earn-page__cell-id {
+  all: unset;
+  cursor: pointer;
+  color: var(--base-color-link, #187d97);
+  font-family: inherit;
+  font-size: inherit;
+  white-space: nowrap;
+}
+
+.earn-page__cell-id:hover {
+  text-decoration: underline;
+}
+
+.earn-page__cell-type {
+  white-space: nowrap;
+}
+
+.earn-page__cell-amount {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Force table cells to stay single line */
+.earn-page__card .table-wrap {
+  overflow-x: auto;
+}
+
+.earn-page__card .table td,
+.earn-page__card .table th {
+  white-space: nowrap;
+}
+
+/* Copy cell */
+.earn-page__copy-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.earn-page__copy-btn {
+  all: unset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  color: var(--text-tertiary, #999);
+}
+
+.earn-page__copy-btn:hover {
+  color: var(--text-primary, #333);
+  background: var(--surface-surface-secondary, #f6f7f9);
+}
+
+.earn-page__copy-btn .material-symbols-rounded {
+  font-size: 16px;
+}
+
+/* Filter Modal */
+.earn-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.earn-filter__section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.earn-filter-modal.modal {
+  overflow: visible;
+}
+
+.earn-filter-modal .modal__body {
+  overflow: visible;
+}
+
+.earn-filter-modal .modal__foot {
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+@media (max-width: 1023px) {
+  .earn-page {
+    gap: 16px;
+  }
+
+  .earn-page__card {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .earn-page__toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .earn-page__toolbar-actions {
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+
+  .earn-page__search {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+  }
+}

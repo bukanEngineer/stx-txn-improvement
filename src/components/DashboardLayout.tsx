@@ -3,12 +3,17 @@ import { Sidebar, TopNavigation, DEFAULT_NAV_ITEMS } from "prohellox-designsyste
 import { useIsMobile } from "../hooks/useMediaQuery";
 import "./DashboardLayout.css";
 
-const HIDDEN_NAV_IDS = ["statement", "devtools", "team", "settings"];
-const NAV_ITEMS = DEFAULT_NAV_ITEMS
+const HIDDEN_NAV_IDS = ["statement", "devtools", "team", "settings", "support"];
+const FILTERED_ITEMS = DEFAULT_NAV_ITEMS
   .filter((item: { id: string }) => !HIDDEN_NAV_IDS.includes(item.id))
   .map((item) =>
     item.id === "mint" ? { id: "mint", icon: item.icon, label: item.label } : item
-  ) as typeof DEFAULT_NAV_ITEMS;
+  );
+const NAV_ITEMS = [
+  ...FILTERED_ITEMS.slice(0, FILTERED_ITEMS.findIndex((i: { id: string }) => i.id === "mint")),
+  { id: "earn", icon: "savings", label: "Earn" },
+  ...FILTERED_ITEMS.slice(FILTERED_ITEMS.findIndex((i: { id: string }) => i.id === "mint")),
+] as typeof DEFAULT_NAV_ITEMS;
 
 const COMPANIES = [
   { id: "acme", name: "Acme Corp", type: "Business Account", selected: true },

@@ -7,97 +7,16 @@ import {
   Tag,
   Icon,
   Badge,
-  AssetMark,
   Modal,
   MultiSelect,
   DateInput,
   useToast,
 } from "prohellox-designsystem";
-import { MOCK_MINT_TRANSACTIONS } from "../data/mockMintTransactions";
-import type { MintTransactionRow } from "../data/mockMintTransactions";
+import { MOCK_EARN_TRANSACTIONS } from "../data/mockEarnTransactions";
+import type { EarnTransactionRow } from "../data/mockEarnTransactions";
 import { useIsMobile } from "../hooks/useMediaQuery";
-import { MintMobileList } from "../components/MintMobileList";
-import "./MintPage.css";
-
-/* ─── Mint Banner ─── */
-function MintBanner({ onClose }: { onClose: () => void }) {
-  return (
-    <div className="mint-banner">
-      <button type="button" className="mint-banner__close" onClick={onClose} aria-label="Close banner">
-        <span className="material-symbols-rounded">close</span>
-      </button>
-      <div className="mint-banner__content">
-        <p className="mint-banner__title">Instantly convert funds into stablecoins</p>
-        <p className="mint-banner__subtitle">
-          Setup once, receive stablecoin instantly in your blockchain wallet.{" "}
-          <a href="#" className="mint-banner__link">Learn More</a>
-        </p>
-      </div>
-      <div className="mint-banner__steps">
-        <p className="mint-banner__steps-label">How it works:</p>
-        <div className="mint-banner__steps-row">
-          <div className="mint-banner__step">
-            <span className="material-symbols-rounded mint-banner__step-icon">wallet</span>
-            <span className="mint-banner__step-text">Select asset and destination</span>
-          </div>
-          <span className="material-symbols-rounded mint-banner__step-arrow">arrow_right_alt</span>
-          <div className="mint-banner__step">
-            <span className="material-symbols-rounded mint-banner__step-icon">payments</span>
-            <span className="mint-banner__step-text">Transfer funds to provided account details</span>
-          </div>
-          <span className="material-symbols-rounded mint-banner__step-arrow">arrow_right_alt</span>
-          <div className="mint-banner__step">
-            <span className="material-symbols-rounded mint-banner__step-icon">currency_exchange</span>
-            <span className="mint-banner__step-text">Receive stablecoin in your wallet</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─── Destination Wallet Card ─── */
-function DestinationWallet() {
-  return (
-    <div className="dest-wallet">
-      <div className="dest-wallet__header">
-        <div className="dest-wallet__header-text">
-          <h3 className="dest-wallet__title">Destination Wallet</h3>
-          <p className="dest-wallet__subtitle">Your funds will be automatically converted 1:1 and sent to this wallet</p>
-        </div>
-        <button type="button" className="dest-wallet__setup-btn">
-          Set Up
-          <span className="material-symbols-rounded">add</span>
-        </button>
-      </div>
-      <div className="dest-wallet__item">
-        <div className="dest-wallet__item-info">
-          <div className="dest-wallet__wallet-name">
-            <span className="dest-wallet__wallet-label">Wallet XYZ</span>
-            <AssetMark asset="Metamask" size={20} label="M" color={undefined} children={undefined} />
-          </div>
-          <div className="dest-wallet__wallet-address">
-            <span>0xdac17f958d2ee523a....831ec7</span>
-            <button type="button" className="mint-page__copy-btn" aria-label="Copy">
-              <span className="material-symbols-rounded">content_copy</span>
-            </button>
-          </div>
-          <div className="dest-wallet__wallet-meta">
-            <span className="dest-wallet__meta-label">Asset:</span>
-            <AssetMark asset="XSGD" size={16} label="X" color={undefined} children={undefined} />
-            <span className="dest-wallet__meta-value">XSGD</span>
-            <span className="dest-wallet__meta-label" style={{ marginLeft: 12 }}>Network:</span>
-            <AssetMark asset="Arbitrum" size={16} label="A" color={undefined} children={undefined} />
-            <span className="dest-wallet__meta-value">Arbitrum</span>
-          </div>
-        </div>
-        <button type="button" className="dest-wallet__arrow-btn" aria-label="View details">
-          <span className="material-symbols-rounded">arrow_right_alt</span>
-        </button>
-      </div>
-    </div>
-  );
-}
+import { EarnMobileList } from "../components/EarnMobileList";
+import "./EarnPage.css";
 
 const PAGE_SIZE = 10;
 
@@ -117,11 +36,11 @@ function CopyCell({ value, children, className }: { value: string; children: Rea
   };
 
   return (
-    <span className={`mint-page__copy-cell ${className ?? ""}`}>
+    <span className={`earn-page__copy-cell ${className ?? ""}`}>
       {children}
       <button
         type="button"
-        className="mint-page__copy-btn"
+        className="earn-page__copy-btn"
         onClick={handleCopy}
         aria-label={copied ? "Copied" : "Copy"}
       >
@@ -133,30 +52,35 @@ function CopyCell({ value, children, className }: { value: string; children: Rea
   );
 }
 
-export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transaction: MintTransactionRow) => void }) {
+interface EarnPageProps {
+  onSelectTransaction: (transaction: EarnTransactionRow) => void;
+}
+
+export function EarnPage({ onSelectTransaction }: EarnPageProps) {
   const isMobile = useIsMobile();
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
+
+  // Infinite scroll state
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [loading, setLoading] = useState(false);
-  const [bannerVisible, setBannerVisible] = useState(true);
 
   // Filter state
   const [filterModalOpen, setFilterModalOpen] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string[]>([]);
-  const [filterAsset, setFilterAsset] = useState<string[]>([]);
+  const [filterType, setFilterType] = useState<string[]>([]);
   const [filterDateFrom, setFilterDateFrom] = useState("");
   const [filterDateTo, setFilterDateTo] = useState("");
 
   // Temp filter state (for modal editing before applying)
   const [tempFilterStatus, setTempFilterStatus] = useState<string[]>([]);
-  const [tempFilterAsset, setTempFilterAsset] = useState<string[]>([]);
+  const [tempFilterType, setTempFilterType] = useState<string[]>([]);
   const [tempFilterDateFrom, setTempFilterDateFrom] = useState("");
   const [tempFilterDateTo, setTempFilterDateTo] = useState("");
 
   const openFilterModal = () => {
     setTempFilterStatus([...filterStatus]);
-    setTempFilterAsset([...filterAsset]);
+    setTempFilterType([...filterType]);
     setTempFilterDateFrom(filterDateFrom);
     setTempFilterDateTo(filterDateTo);
     setFilterModalOpen(true);
@@ -164,7 +88,7 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
 
   const applyFilter = () => {
     setFilterStatus(tempFilterStatus);
-    setFilterAsset(tempFilterAsset);
+    setFilterType(tempFilterType);
     setFilterDateFrom(tempFilterDateFrom);
     setFilterDateTo(tempFilterDateTo);
     setFilterModalOpen(false);
@@ -173,15 +97,15 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
 
   const resetFilter = () => {
     setTempFilterStatus([]);
-    setTempFilterAsset([]);
+    setTempFilterType([]);
     setTempFilterDateFrom("");
     setTempFilterDateTo("");
   };
 
-  const isFilterActive = filterStatus.length > 0 || filterAsset.length > 0 || filterDateFrom !== "" || filterDateTo !== "";
+  const isFilterActive = filterStatus.length > 0 || filterType.length > 0 || filterDateFrom !== "" || filterDateTo !== "";
 
-  const filteredData = useMemo<MintTransactionRow[]>(() => {
-    let result = [...MOCK_MINT_TRANSACTIONS];
+  const filteredData = useMemo<EarnTransactionRow[]>(() => {
+    let result = [...MOCK_EARN_TRANSACTIONS];
 
     // Apply search
     if (search.trim()) {
@@ -190,9 +114,8 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
         (row) =>
           row.id.toLowerCase().includes(q) ||
           row.fullId.toLowerCase().includes(q) ||
-          row.wallet.toLowerCase().includes(q) ||
-          row.currency.toLowerCase().includes(q) ||
-          row.network.toLowerCase().includes(q)
+          row.type.toLowerCase().includes(q) ||
+          row.currency.toLowerCase().includes(q)
       );
     }
 
@@ -201,9 +124,9 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
       result = result.filter((row) => filterStatus.includes(row.status.label));
     }
 
-    // Apply asset filter
-    if (filterAsset.length > 0) {
-      result = result.filter((row) => filterAsset.includes(row.currency));
+    // Apply type filter
+    if (filterType.length > 0) {
+      result = result.filter((row) => filterType.includes(row.type));
     }
 
     // Apply date range filter
@@ -230,7 +153,7 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
     });
 
     return result;
-  }, [search, sortOrder, filterStatus, filterAsset, filterDateFrom, filterDateTo]);
+  }, [search, sortOrder, filterStatus, filterType, filterDateFrom, filterDateTo]);
 
   const visibleData = filteredData.slice(0, visibleCount);
   const hasMore = visibleCount < filteredData.length;
@@ -248,14 +171,16 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
     {
       key: "id",
       header: "Transaction ID",
-      render: (row: MintTransactionRow) => (
-        <button
-          type="button"
-          className="mint-page__cell-id"
-          onClick={() => onSelectTransaction(row)}
-        >
-          {row.id}
-        </button>
+      render: (row: EarnTransactionRow) => (
+        <CopyCell value={row.fullId}>
+          <button
+            type="button"
+            className="earn-page__cell-id"
+            onClick={() => onSelectTransaction(row)}
+          >
+            {row.id}
+          </button>
+        </CopyCell>
       ),
     },
     {
@@ -265,34 +190,19 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
       date: true,
     },
     {
+      key: "type",
+      header: "Type",
+      render: (row: EarnTransactionRow) => (
+        <span className="earn-page__cell-type">{row.type}</span>
+      ),
+    },
+    {
       key: "netAmount",
       header: "Net Amount",
       width: 180,
-      render: (row: MintTransactionRow) => (
-        <span className="mint-page__cell-amount">
+      render: (row: EarnTransactionRow) => (
+        <span className="earn-page__cell-amount">
           {row.netAmount.toLocaleString()} {row.currency}
-        </span>
-      ),
-    },
-    {
-      key: "wallet",
-      header: "Wallet Address",
-      width: 160,
-      render: (row: MintTransactionRow) => (
-        <CopyCell value={row.wallet} className="mint-page__cell-wallet">
-          {row.wallet.length > 12
-            ? row.wallet.slice(0, 6) + "…" + row.wallet.slice(-5)
-            : row.wallet}
-        </CopyCell>
-      ),
-    },
-    {
-      key: "network",
-      header: "Network",
-      render: (row: MintTransactionRow) => (
-        <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
-          <AssetMark asset={row.network} size={20} label={row.network.slice(0, 1)} color={undefined} children={undefined} />
-          {row.network}
         </span>
       ),
     },
@@ -300,7 +210,7 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
       key: "status",
       header: "Status",
       fixed: "right",
-      render: (row: MintTransactionRow) => (
+      render: (row: EarnTransactionRow) => (
         <Tag tone={row.status.tone} icon={undefined} onRemove={undefined} onClick={undefined}>
           {row.status.label}
         </Tag>
@@ -309,24 +219,20 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
   ];
 
   return (
-    <div className="mint-page">
+    <div className="earn-page">
       <PageTitle
-        title="Mint"
+        title="Earn"
         subtitle={undefined}
         breadcrumb={undefined}
         actions={undefined}
       />
 
-      {bannerVisible && <MintBanner onClose={() => setBannerVisible(false)} />}
-
-      <DestinationWallet />
-
-      <div className="mint-page__card">
+      <div className="earn-page__card">
         {/* Toolbar with label, search, filter, and export */}
-        <div className="mint-page__toolbar">
-          <h2 className="mint-page__label">Mint Transaction</h2>
-          <div className="mint-page__toolbar-actions">
-            <div className="mint-page__search">
+        <div className="earn-page__toolbar">
+          <h2 className="earn-page__label">Earn Transaction</h2>
+          <div className="earn-page__toolbar-actions">
+            <div className="earn-page__search">
               <Input
                 type="search"
                 placeholder="Search by Transaction ID"
@@ -359,19 +265,19 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
         </div>
 
         {isMobile ? (
-          <MintMobileList
+          <EarnMobileList
             rows={visibleData}
             hasMore={hasMore}
             loading={loading}
             onLoadMore={handleLoadMore}
-            onSelect={onSelectTransaction}
             endLabel={`All ${filteredData.length} data already shown`}
+            onSelect={onSelectTransaction}
           />
         ) : (
           <Table
             columns={columns as any}
             rows={visibleData as any}
-            empty="No mint transactions found."
+            empty="No earn transactions found."
             scrollX={900}
             scrollY={480}
             sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
@@ -399,7 +305,7 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
         title="Filter Transactions"
         illustration={undefined}
         media={undefined}
-        className="mint-filter-modal"
+        className="earn-filter-modal"
         footer={
           <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", width: "100%" }}>
             <Button variant="tertiary" size="lg" onClick={resetFilter}>
@@ -411,8 +317,8 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
           </div>
         }
       >
-        <div className="mint-filter">
-          <div className="mint-filter__section">
+        <div className="earn-filter">
+          <div className="earn-filter__section">
             <MultiSelect
               label="Status"
               helper={undefined}
@@ -429,22 +335,23 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
               id={undefined}
             />
           </div>
-          <div className="mint-filter__section">
+          <div className="earn-filter__section">
             <MultiSelect
-              label="Asset"
+              label="Type"
               helper={undefined}
               error={undefined}
               options={[
-                { value: "XSGD", label: "XSGD" },
-                { value: "XUSD", label: "XUSD" },
+                { value: "Reward Payout", label: "Reward Payout" },
+                { value: "Add Funds", label: "Add Funds" },
+                { value: "Remove Funds", label: "Remove Funds" },
               ] as any}
-              placeholder="Select asset"
-              value={tempFilterAsset}
-              onChange={(vals: string[]) => setTempFilterAsset(vals)}
+              placeholder="Select type"
+              value={tempFilterType}
+              onChange={(vals: string[]) => setTempFilterType(vals)}
               id={undefined}
             />
           </div>
-          <div className="mint-filter__section">
+          <div className="earn-filter__section">
             <DateInput
               label="Transaction Date"
               helper={undefined}

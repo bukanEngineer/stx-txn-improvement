@@ -1,0 +1,236 @@
+.mint-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Back button */
+.mint-detail__back {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: "Red Hat Display", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--base-color-link, #187d97);
+}
+
+.mint-detail__back:hover {
+  opacity: 0.8;
+}
+
+/* Content layout: main card + amount card side by side */
+.mint-detail__content {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+/* Cards */
+.mint-detail__card {
+  background: var(--surface-surface-neutral, #ffffff);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mint-detail__content > .mint-detail__card--main {
+  flex: 7 1 0;
+  min-width: 0;
+}
+
+.mint-detail__card--amount {
+  flex: 3 1 0;
+  min-width: 0;
+  gap: 16px;
+  padding: 16px 20px;
+}
+
+.mint-detail__card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mint-detail__card-title {
+  font-family: "Red Hat Display", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--base-color-on-neutral, #002b2a);
+  margin: 0;
+}
+
+.mint-detail__divider {
+  border: none;
+  border-top: 1px solid var(--base-color-line, #d8d8d8);
+  margin: 0;
+}
+
+/* Detail field rows (two columns) */
+.mint-detail__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+/* Single-field rows span full width */
+.mint-detail__row > .mint-detail__field:only-child {
+  grid-column: 1 / -1;
+}
+
+.mint-detail__field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 44px;
+  min-width: 0;
+}
+
+.mint-detail__label {
+  font-family: "Red Hat Display", sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--base-color-on-neutral, #002b2a);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mint-detail__value {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--base-color-on-neutral, #002b2a);
+  word-break: break-all;
+}
+
+.mint-detail__value--copy {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--base-color-on-neutral, #002b2a);
+  word-break: break-all;
+}
+
+.mint-detail__value--copy:hover {
+  opacity: 0.7;
+}
+
+.mint-detail__value--link {
+  color: var(--base-color-link, #187d97);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Amount Details card */
+.mint-detail__amount-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Cross Asset section */
+.mint-detail__cross-asset {
+  background: var(--surface-surface-secondary-neutral, #f6f7f9);
+  border-radius: 5px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.mint-detail__cross-asset-icons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mint-detail__cross-asset-currency {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow: hidden;
+}
+
+.mint-detail__cross-asset-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mint-detail__cross-asset-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.mint-detail__cross-asset-label {
+  font-family: "Red Hat Display", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--base-color-on-neutral, #002b2a);
+  white-space: nowrap;
+}
+
+.mint-detail__cross-asset-note {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--base-color-on-neutral, #002b2a);
+  text-align: center;
+  margin: 0;
+}
+
+.mint-detail__amount-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mint-detail__amount-label {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--base-color-on-neutral-secondary, #505454);
+}
+
+.mint-detail__amount-value {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--base-color-on-neutral, #002b2a);
+}
+
+.mint-detail__amount-value--bold {
+  font-family: "Red Hat Display", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* Help guide */
+.mint-detail__guide {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 14px;
+  color: var(--base-color-on-neutral, #1b2736);
+}
+
+.mint-detail__guide-link {
+  color: var(--base-color-link, #187d97);
+  text-decoration: underline;
+  cursor: pointer;
+}

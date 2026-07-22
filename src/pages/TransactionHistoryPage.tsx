@@ -130,7 +130,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
     { id: "swap", label: "Swap" },
     { id: "otc", label: "OTC" },
     { id: "admin-transfer", label: "Admin Transfer" },
-    { id: "payout", label: "Payout" },
+    { id: "payout", label: "Payout / Payment (tbd)" },
   ];
 
   // Count of action-needed items (Pending + Processing)
@@ -461,6 +461,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       key: "date",
       header: "Transaction Date",
       sortable: true,
+      date: true,
     },
     {
       key: "type",
@@ -541,6 +542,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       key: "date",
       header: "Transaction Date",
       sortable: true,
+      date: true,
     },
     {
       key: "sell",
@@ -594,6 +596,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       key: "date",
       header: "Transaction Date",
       sortable: true,
+      date: true,
     },
     {
       key: "sell",
@@ -651,6 +654,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       key: "date",
       header: "Transaction Date",
       sortable: true,
+      date: true,
     },
     {
       key: "type",
@@ -791,6 +795,8 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 hasMore={hasMore}
                 loading={loading}
                 endLabel={`All ${activeData.length} data already shown`}
+                timezone="Asia/Singapore"
+                showTimezone
               />
             )}
           </>
@@ -856,6 +862,8 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 hasMore={hasMore}
                 loading={loading}
                 endLabel={`All ${activeData.length} data already shown`}
+                timezone="Asia/Singapore"
+                showTimezone
               />
             )}
           </>
@@ -944,6 +952,8 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 hasMore={hasMore}
                 loading={loading}
                 endLabel={`All ${activeData.length} data already shown`}
+                timezone="Asia/Singapore"
+                showTimezone
               />
             )}
           </>
@@ -1033,6 +1043,8 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 hasMore={hasMore}
                 loading={loading}
                 endLabel={`All ${activeData.length} data already shown`}
+                timezone="Asia/Singapore"
+                showTimezone
               />
             )}
           </>

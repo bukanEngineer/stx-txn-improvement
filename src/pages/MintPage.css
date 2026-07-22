@@ -290,10 +290,16 @@
 
 /* Cell styles */
 .mint-page__cell-id {
+  all: unset;
+  cursor: pointer;
   color: var(--base-color-link, #187d97);
   font-family: inherit;
   font-size: inherit;
   white-space: nowrap;
+}
+
+.mint-page__cell-id:hover {
+  text-decoration: underline;
 }
 
 .mint-page__cell-amount {
