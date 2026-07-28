@@ -349,12 +349,12 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
             </div>
             <Button variant="tertiary" size="sm" onClick={openFilterModal}>
               {isFilterActive && <Badge tone="critical" dot>{null}</Badge>}
-              Filter
-              <Icon name="filter_list" size={20} color={undefined} style={undefined} />
+              <Icon name="tune" size={20} color={undefined} style={undefined} />
+              {!isMobile && "Filter"}
             </Button>
             <Button variant="tertiary" size="sm">
-              Export CSV
               <Icon name="download" size={20} color={undefined} style={undefined} />
+              {!isMobile && "Export CSV"}
             </Button>
           </div>
         </div>

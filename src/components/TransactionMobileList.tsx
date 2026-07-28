@@ -77,60 +77,61 @@ export function BlockchainMobileList({
   return (
     <div className="mobile-txn-list">
       {rows.map((row) => (
-        <article key={row.fullId} className="mobile-txn-card">
-          <div className="mobile-txn-card__header">
-            <span className="txn-page__copy-cell">
-              <button
-                type="button"
-                className="mobile-txn-card__id"
-                onClick={() => onSelect(row)}
-              >
-                {row.id}
-              </button>
-              <CopyButton value={row.fullId} />
-            </span>
-            {!actionNeeded && (
-              <Tag tone={row.status.tone} icon={undefined} onRemove={undefined} onClick={undefined}>
-                {row.status.label}
-              </Tag>
-            )}
-          </div>
-          <div className="mobile-txn-card__meta">
-            <div className="mobile-txn-card__row">
-              <span className="mobile-txn-card__label">Type</span>
-              <span className="mobile-txn-card__value mobile-txn-card__value--bold">
+        <article key={row.fullId} className="mobile-txn-card mobile-swap-card">
+          <div className="mobile-swap-card__header">
+            <div className="mobile-swap-card__pair">
+              <span className="mobile-swap-card__pair-value mobile-swap-card__pair-value--title">
                 {row.type.replace(/Blockchain\s*/gi, "")}
               </span>
             </div>
-            <div className="mobile-txn-card__row">
-              <span className="mobile-txn-card__label">Net Amount</span>
-              <span className="mobile-txn-card__value mobile-txn-card__value--bold">
-                {(row.totalAmount - row.fee).toLocaleString()} {row.currency}
-              </span>
+            <span className="mobile-swap-card__total">
+              {(row.totalAmount - row.fee).toLocaleString()} {row.currency}
+            </span>
+          </div>
+          <div className="mobile-swap-card__body">
+            <div className="mobile-swap-card__section">
+              <span className="mobile-swap-card__label">Transaction ID</span>
+              <button
+                type="button"
+                className="mobile-swap-card__value mobile-swap-card__id-link"
+                onClick={() => onSelect(row)}
+              >
+                {row.fullId}
+              </button>
             </div>
-            <div className="mobile-txn-card__row">
-              <span className="mobile-txn-card__label">Date</span>
-              <span className="mobile-txn-card__value">{row.date}</span>
+            <div className="mobile-swap-card__section">
+              <span className="mobile-swap-card__label">Transaction Date</span>
+              <span className="mobile-swap-card__value">{row.date}</span>
             </div>
-            <div className="mobile-txn-card__row">
-              <span className="mobile-txn-card__label">Wallet</span>
-              <span className="mobile-txn-card__value mobile-txn-card__value--mono txn-page__copy-cell">
-                {row.wallet.length > 12
-                  ? row.wallet.slice(0, 6) + "…" + row.wallet.slice(-5)
-                  : row.wallet}
-                <CopyButton value={row.wallet} />
-              </span>
+            <div className="mobile-swap-card__amounts">
+              <div className="mobile-swap-card__section">
+                <span className="mobile-swap-card__label">Wallet</span>
+                <span className="mobile-swap-card__value txn-page__copy-cell">
+                  {row.wallet.length > 12
+                    ? row.wallet.slice(0, 6) + "…" + row.wallet.slice(-5)
+                    : row.wallet}
+                  <CopyButton value={row.wallet} />
+                </span>
+              </div>
+              <div className="mobile-swap-card__section">
+                <span className="mobile-swap-card__label">Network</span>
+                <span className="mobile-swap-card__value mobile-swap-card__value--inline">
+                  <PartnerLogo name={row.network.toLowerCase()} size={20} style={undefined} />
+                  {row.network}
+                </span>
+              </div>
             </div>
-            <div className="mobile-txn-card__row">
-              <span className="mobile-txn-card__label">Network</span>
-              <span className="mobile-txn-card__value mobile-txn-card__network">
-                <PartnerLogo name={row.network.toLowerCase()} size={20} style={undefined} />
-                {row.network}
-              </span>
-            </div>
+            {!actionNeeded && (
+              <div className="mobile-swap-card__status">
+                <span className="mobile-swap-card__status-label">Status:</span>
+                <Tag tone={row.status.tone} size="small" icon={undefined} onRemove={undefined} onClick={undefined}>
+                  {row.status.label}
+                </Tag>
+              </div>
+            )}
           </div>
           {actionNeeded && (
-            <div className="mobile-txn-card__footer">
+            <div className="mobile-swap-card__footer">
               <Button variant="secondary" size="sm" onClick={() => onConfirm(row)}>
                 Confirm Deposit
               </Button>
@@ -167,54 +168,55 @@ export function BankMobileList({
   return (
     <div className="mobile-txn-list">
       {rows.map((row) => (
-        <article key={row.fullId} className="mobile-txn-card">
-          <div className="mobile-txn-card__header">
-            <span className="txn-page__copy-cell">
-              <button
-                type="button"
-                className="mobile-txn-card__id"
-                onClick={() => onSelect(row)}
-              >
-                {row.id}
-              </button>
-              <CopyButton value={row.fullId} />
-            </span>
-            {!actionNeeded && (
-              <Tag tone={row.status.tone} icon={undefined} onRemove={undefined} onClick={undefined}>
-                {row.status.label}
-              </Tag>
-            )}
-          </div>
-          <div className="mobile-txn-card__meta">
-            <div className="mobile-txn-card__row">
-              <span className="mobile-txn-card__label">Type</span>
-              <span className="mobile-txn-card__value mobile-txn-card__value--bold">
+        <article key={row.fullId} className="mobile-txn-card mobile-swap-card">
+          <div className="mobile-swap-card__header">
+            <div className="mobile-swap-card__pair">
+              <span className="mobile-swap-card__pair-value mobile-swap-card__pair-value--title">
                 {row.type.replace(/Bank\s*/gi, "")}
               </span>
             </div>
-            <div className="mobile-txn-card__row">
-              <span className="mobile-txn-card__label">Net Amount</span>
-              <span className="mobile-txn-card__value mobile-txn-card__value--bold">
-                {(row.totalAmount - row.fee).toLocaleString()} {row.currency}
-              </span>
+            <span className="mobile-swap-card__total">
+              {(row.totalAmount - row.fee).toLocaleString()} {row.currency}
+            </span>
+          </div>
+          <div className="mobile-swap-card__body">
+            <div className="mobile-swap-card__section">
+              <span className="mobile-swap-card__label">Transaction ID</span>
+              <button
+                type="button"
+                className="mobile-swap-card__value mobile-swap-card__id-link"
+                onClick={() => onSelect(row)}
+              >
+                {row.fullId}
+              </button>
             </div>
-            <div className="mobile-txn-card__row">
-              <span className="mobile-txn-card__label">Date</span>
-              <span className="mobile-txn-card__value">{row.date}</span>
+            <div className="mobile-swap-card__section">
+              <span className="mobile-swap-card__label">Transaction Date</span>
+              <span className="mobile-swap-card__value">{row.date}</span>
             </div>
-            <div className="mobile-txn-card__row">
-              <span className="mobile-txn-card__label">Bank Account</span>
-              <span className="mobile-txn-card__value">
-                {row.bankName} {row.accountNumber}
-              </span>
+            <div className="mobile-swap-card__amounts">
+              <div className="mobile-swap-card__section">
+                <span className="mobile-swap-card__label">Bank Account</span>
+                <span className="mobile-swap-card__value">
+                  {row.bankName} {row.accountNumber}
+                </span>
+              </div>
+              <div className="mobile-swap-card__section">
+                <span className="mobile-swap-card__label">Network</span>
+                <span className="mobile-swap-card__value">{row.network}</span>
+              </div>
             </div>
-            <div className="mobile-txn-card__row">
-              <span className="mobile-txn-card__label">Network</span>
-              <span className="mobile-txn-card__value">{row.network}</span>
-            </div>
+            {!actionNeeded && (
+              <div className="mobile-swap-card__status">
+                <span className="mobile-swap-card__status-label">Status:</span>
+                <Tag tone={row.status.tone} size="small" icon={undefined} onRemove={undefined} onClick={undefined}>
+                  {row.status.label}
+                </Tag>
+              </div>
+            )}
           </div>
           {actionNeeded && (
-            <div className="mobile-txn-card__footer">
+            <div className="mobile-swap-card__footer">
               <Button variant="secondary" size="sm" onClick={() => onConfirm(row)}>
                 Confirm Transfer
               </Button>
@@ -247,42 +249,44 @@ export function SwapMobileList({
   return (
     <div className="mobile-txn-list">
       {rows.map((row) => (
-        <article key={row.fullId} className="mobile-txn-card">
-          <div className="mobile-txn-card__header">
-            <span className="txn-page__copy-cell">
-              <span className="mobile-txn-card__id-text">
-                {showFullId
-                  ? row.fullId
-                  : `${row.fullId.slice(0, 11)}....${row.fullId.slice(-4)}`}
-              </span>
-              <CopyButton value={row.fullId} />
+        <article key={row.fullId} className="mobile-txn-card mobile-swap-card">
+          <div className="mobile-swap-card__header">
+            <div className="mobile-swap-card__pair">
+              <span className="mobile-swap-card__pair-label">{showFullId ? "OTC from" : "Swap from"}</span>
+              <span className="mobile-swap-card__pair-value">{row.fromCurrency} to {row.toCurrency}</span>
+            </div>
+            <span className="mobile-swap-card__total">
+              {row.toAmount.toLocaleString()} {row.toCurrency}
             </span>
-            <Tag tone={row.status.tone} icon={undefined} onRemove={undefined} onClick={undefined}>
-              {row.status.label}
-            </Tag>
           </div>
-          <div className="mobile-txn-card__meta">
-            <div className="mobile-txn-card__row">
-              <span className="mobile-txn-card__label">Sell</span>
-              <span className="mobile-txn-card__value">
-                {row.fromAmount.toLocaleString()} {row.fromCurrency}
-              </span>
+          <div className="mobile-swap-card__body">
+            <div className="mobile-swap-card__section">
+              <span className="mobile-swap-card__label">Transaction ID</span>
+              <span className="mobile-swap-card__value">{row.fullId}</span>
             </div>
-            <div className="mobile-txn-card__row">
-              <span className="mobile-txn-card__label">Buy</span>
-              <span className="mobile-txn-card__value">
-                {row.toAmount.toLocaleString()} {row.toCurrency}
-              </span>
+            <div className="mobile-swap-card__section">
+              <span className="mobile-swap-card__label">Transaction Date</span>
+              <span className="mobile-swap-card__value">{row.date}</span>
             </div>
-            <div className="mobile-txn-card__row">
-              <span className="mobile-txn-card__label">Rate</span>
-              <span className="mobile-txn-card__value">
-                1 {row.fromCurrency} ≈ {row.rate} {row.toCurrency}
-              </span>
+            <div className="mobile-swap-card__amounts">
+              <div className="mobile-swap-card__section">
+                <span className="mobile-swap-card__label">Sell</span>
+                <span className="mobile-swap-card__value">
+                  {row.fromAmount.toLocaleString()} {row.fromCurrency}
+                </span>
+              </div>
+              <div className="mobile-swap-card__section">
+                <span className="mobile-swap-card__label">Rate</span>
+                <span className="mobile-swap-card__value">
+                  1 {row.fromCurrency} ≈ {row.rate} {row.toCurrency}
+                </span>
+              </div>
             </div>
-            <div className="mobile-txn-card__row">
-              <span className="mobile-txn-card__label">Date</span>
-              <span className="mobile-txn-card__value">{row.date}</span>
+            <div className="mobile-swap-card__status">
+              <span className="mobile-swap-card__status-label">Status:</span>
+              <Tag tone={row.status.tone} size="small" icon={undefined} onRemove={undefined} onClick={undefined}>
+                {row.status.label}
+              </Tag>
             </div>
           </div>
         </article>

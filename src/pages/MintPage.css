@@ -441,6 +441,15 @@
     width: 100%;
   }
 
+  .mint-page__toolbar-actions > button {
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+    padding: 0;
+    justify-content: center;
+    flex: 0 0 36px;
+  }
+
   .mint-page__search {
     flex: 1;
     min-width: 0;
