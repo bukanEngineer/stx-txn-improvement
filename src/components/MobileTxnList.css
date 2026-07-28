@@ -225,14 +225,8 @@
 }
 
 .mobile-swap-card__id-link {
-  all: unset;
-  cursor: pointer;
   color: var(--base-color-link, #187d97);
   word-break: break-word;
-}
-
-.mobile-swap-card__id-link:hover {
-  text-decoration: underline;
 }
 
 .mobile-swap-card__value--inline {

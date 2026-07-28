@@ -23,7 +23,7 @@ import "./TransactionHistoryPage.css";
 
 const PAGE_SIZE = 10;
 
-type PrimaryTab = "bank-transfer" | "blockchain-transfer" | "swap" | "otc" | "admin-transfer" | "payout";
+type PrimaryTab = "bank-transfer" | "blockchain-transfer" | "swap" | "otc" | "admin-transfer";
 type SecondaryTab = "all" | "action-needed";
 
 interface TransactionHistoryPageProps {
@@ -130,7 +130,6 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
     { id: "swap", label: "Swap" },
     { id: "otc", label: "OTC" },
     { id: "admin-transfer", label: "Admin Transfer" },
-    { id: "payout", label: "Payout / Payment (tbd)" },
   ];
 
   // Count of action-needed items (Pending + Processing)
@@ -432,10 +431,6 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
     "admin-transfer": {
       title: "No Admin Transfer transactions",
       sub: "Your admin transfer transactions will appear here once you make your first transfer.",
-    },
-    payout: {
-      title: "No Payout transactions",
-      sub: "Your payout transactions will appear here once you make your first payout.",
     },
   };
 

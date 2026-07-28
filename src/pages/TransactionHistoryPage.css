@@ -203,10 +203,19 @@
 
   /* Scroll the Tabs root only — `[class*="tabs"]` also matched
      `.tabs__strip` / `.tabs__tab` and clipped the active underline
-     (`::after { bottom: -1px }`) that sits over the strip border. */
+     (`::after { bottom: -1px }`) that sits over the strip border.
+     Put the divider on `.tabs` (full card width) instead of the
+     content-sized strip, so the line doesn't stop mid-row (e.g. at OTC). */
   .txn-page__card > .tabs {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+    border-bottom: 1px solid var(--border, #d8d8d8);
+  }
+
+  .txn-page__card > .tabs .tabs__strip {
+    width: max-content;
+    min-width: 100%;
+    border-bottom: none;
   }
 
   .txn-page__toolbar {

@@ -13,7 +13,7 @@ import type { TransactionRow, BankTransferRow } from "./data/mockTransactions";
 import type { MintTransactionRow } from "./data/mockMintTransactions";
 import type { EarnTransactionRow } from "./data/mockEarnTransactions";
 
-type PrimaryTab = "bank-transfer" | "blockchain-transfer" | "swap" | "otc" | "admin-transfer" | "payout";
+type PrimaryTab = "bank-transfer" | "blockchain-transfer" | "swap" | "otc" | "admin-transfer";
 type SecondaryTab = "all" | "action-needed";
 
 function App() {

@@ -77,7 +77,16 @@ export function BlockchainMobileList({
   return (
     <div className="mobile-txn-list">
       {rows.map((row) => (
-        <article key={row.fullId} className="mobile-txn-card mobile-swap-card">
+        <article
+          key={row.fullId}
+          className="mobile-txn-card mobile-swap-card mobile-swap-card--clickable"
+          onClick={() => onSelect(row)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") onSelect(row);
+          }}
+        >
           <div className="mobile-swap-card__header">
             <div className="mobile-swap-card__pair">
               <span className="mobile-swap-card__pair-value mobile-swap-card__pair-value--title">
@@ -91,13 +100,9 @@ export function BlockchainMobileList({
           <div className="mobile-swap-card__body">
             <div className="mobile-swap-card__section">
               <span className="mobile-swap-card__label">Transaction ID</span>
-              <button
-                type="button"
-                className="mobile-swap-card__value mobile-swap-card__id-link"
-                onClick={() => onSelect(row)}
-              >
+              <span className="mobile-swap-card__value mobile-swap-card__id-link">
                 {row.fullId}
-              </button>
+              </span>
             </div>
             <div className="mobile-swap-card__section">
               <span className="mobile-swap-card__label">Transaction Date</span>
@@ -132,7 +137,14 @@ export function BlockchainMobileList({
           </div>
           {actionNeeded && (
             <div className="mobile-swap-card__footer">
-              <Button variant="secondary" size="sm" onClick={() => onConfirm(row)}>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={(e: React.MouseEvent) => {
+                  e.stopPropagation();
+                  onConfirm(row);
+                }}
+              >
                 Confirm Deposit
               </Button>
             </div>
@@ -168,7 +180,16 @@ export function BankMobileList({
   return (
     <div className="mobile-txn-list">
       {rows.map((row) => (
-        <article key={row.fullId} className="mobile-txn-card mobile-swap-card">
+        <article
+          key={row.fullId}
+          className="mobile-txn-card mobile-swap-card mobile-swap-card--clickable"
+          onClick={() => onSelect(row)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") onSelect(row);
+          }}
+        >
           <div className="mobile-swap-card__header">
             <div className="mobile-swap-card__pair">
               <span className="mobile-swap-card__pair-value mobile-swap-card__pair-value--title">
@@ -182,13 +203,9 @@ export function BankMobileList({
           <div className="mobile-swap-card__body">
             <div className="mobile-swap-card__section">
               <span className="mobile-swap-card__label">Transaction ID</span>
-              <button
-                type="button"
-                className="mobile-swap-card__value mobile-swap-card__id-link"
-                onClick={() => onSelect(row)}
-              >
+              <span className="mobile-swap-card__value mobile-swap-card__id-link">
                 {row.fullId}
-              </button>
+              </span>
             </div>
             <div className="mobile-swap-card__section">
               <span className="mobile-swap-card__label">Transaction Date</span>
@@ -217,7 +234,14 @@ export function BankMobileList({
           </div>
           {actionNeeded && (
             <div className="mobile-swap-card__footer">
-              <Button variant="secondary" size="sm" onClick={() => onConfirm(row)}>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={(e: React.MouseEvent) => {
+                  e.stopPropagation();
+                  onConfirm(row);
+                }}
+              >
                 Confirm Transfer
               </Button>
             </div>
