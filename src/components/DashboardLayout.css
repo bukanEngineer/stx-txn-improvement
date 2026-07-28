@@ -80,11 +80,16 @@
     bottom: 0;
     z-index: 40;
     height: 100vh;
-    width: min(280px, 85vw);
+    width: 240px;
     transform: translateX(-100%);
     transition: transform 0.2s ease;
-    background: var(--surface-surface-neutral, #ffffff);
+    background: var(--surface, #ffffff);
     box-shadow: none;
+  }
+
+  .dashboard__sidebar .sidebar {
+    height: 100%;
+    width: 100%;
   }
 
   .dashboard__sidebar--open {
