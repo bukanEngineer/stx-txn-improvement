@@ -59,7 +59,7 @@ interface EarnPageProps {
 export function EarnPage({ onSelectTransaction }: EarnPageProps) {
   const isMobile = useIsMobile();
   const [search, setSearch] = useState("");
-  const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest" | "highest" | "lowest">("newest");
 
   // Infinite scroll state
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
@@ -145,8 +145,13 @@ export function EarnPage({ onSelectTransaction }: EarnPageProps) {
       });
     }
 
-    // Sort by transaction date
+    // Sort by date or net amount
     result.sort((a, b) => {
+      if (sortOrder === "highest" || sortOrder === "lowest") {
+        return sortOrder === "highest"
+          ? b.netAmount - a.netAmount
+          : a.netAmount - b.netAmount;
+      }
       const dateA = new Date(a.date).getTime();
       const dateB = new Date(b.date).getTime();
       return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
@@ -200,6 +205,7 @@ export function EarnPage({ onSelectTransaction }: EarnPageProps) {
       key: "netAmount",
       header: "Net Amount",
       width: 180,
+      sortable: true,
       render: (row: EarnTransactionRow) => (
         <span className="earn-page__cell-amount">
           {row.netAmount.toLocaleString()} {row.currency}
@@ -278,12 +284,23 @@ export function EarnPage({ onSelectTransaction }: EarnPageProps) {
             empty="No earn transactions found."
             scrollX={900}
             scrollY={480}
-            sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
+            sort={
+              sortOrder === "highest" || sortOrder === "lowest"
+                ? { key: "netAmount", direction: sortOrder === "highest" ? "desc" : "asc" }
+                : { key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }
+            }
             onSortChange={(sortState: { key: string; direction: "asc" | "desc" } | null) => {
-              if (sortState && sortState.key === "date") {
+              if (sortState?.key === "date") {
                 setSortOrder(sortState.direction === "desc" ? "newest" : "oldest");
+              } else if (sortState?.key === "netAmount") {
+                setSortOrder(sortState.direction === "desc" ? "highest" : "lowest");
               } else {
-                setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
+                setSortOrder((prev) => {
+                  if (prev === "newest") return "oldest";
+                  if (prev === "oldest") return "newest";
+                  if (prev === "highest") return "lowest";
+                  return "highest";
+                });
               }
             }}
             onLoadMore={handleLoadMore}

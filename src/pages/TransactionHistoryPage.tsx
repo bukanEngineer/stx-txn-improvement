@@ -70,7 +70,7 @@ function CopyCell({ value, children, className }: { value: string; children: Rea
 export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransfer, primaryTab, onPrimaryTabChange, secondaryTab, onSecondaryTabChange }: TransactionHistoryPageProps) {
   const isMobile = useIsMobile();
   const [search, setSearch] = useState("");
-  const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
+  const [sortOrder, setSortOrder] = useState<"newest" | "oldest" | "highest" | "lowest">("newest");
   const [modalOpen, setModalOpen] = useState(false);
   const [modalTransaction, setModalTransaction] = useState<TransactionRow | null>(null);
 
@@ -207,8 +207,13 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       });
     }
 
-    // Sort by transaction date
+    // Sort by date or net amount
     result = [...result].sort((a, b) => {
+      if (sortOrder === "highest" || sortOrder === "lowest") {
+        const amountA = a.totalAmount - a.fee;
+        const amountB = b.totalAmount - b.fee;
+        return sortOrder === "highest" ? amountB - amountA : amountA - amountB;
+      }
       const dateA = new Date(a.date).getTime();
       const dateB = new Date(b.date).getTime();
       return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
@@ -260,11 +265,11 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       });
     }
 
-    // Sort by transaction date
+    // Sort by transaction date (swap has no net amount column)
     result = [...result].sort((a, b) => {
       const dateA = new Date(a.date).getTime();
       const dateB = new Date(b.date).getTime();
-      return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+      return sortOrder === "oldest" ? dateA - dateB : dateB - dateA;
     });
 
     return result;
@@ -313,11 +318,11 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       });
     }
 
-    // Sort by transaction date
+    // Sort by transaction date (OTC has no net amount column)
     result = [...result].sort((a, b) => {
       const dateA = new Date(a.date).getTime();
       const dateB = new Date(b.date).getTime();
-      return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+      return sortOrder === "oldest" ? dateA - dateB : dateB - dateA;
     });
 
     return result;
@@ -377,8 +382,13 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       });
     }
 
-    // Sort by transaction date
+    // Sort by date or net amount
     result = [...result].sort((a, b) => {
+      if (sortOrder === "highest" || sortOrder === "lowest") {
+        const amountA = a.totalAmount - a.fee;
+        const amountB = b.totalAmount - b.fee;
+        return sortOrder === "highest" ? amountB - amountA : amountA - amountB;
+      }
       const dateA = new Date(a.date).getTime();
       const dateB = new Date(b.date).getTime();
       return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
@@ -386,6 +396,26 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
 
     return result;
   }, [search, secondaryTab, sortOrder, filterStatus, filterAsset, filterType, filterDateFrom, filterDateTo]);
+
+  const tableSort =
+    sortOrder === "highest" || sortOrder === "lowest"
+      ? { key: "amount", direction: (sortOrder === "highest" ? "desc" : "asc") as "asc" | "desc" }
+      : { key: "date", direction: (sortOrder === "newest" ? "desc" : "asc") as "asc" | "desc" };
+
+  const handleSortChange = (sortState: { key: string; direction: "asc" | "desc" } | null) => {
+    if (sortState?.key === "date") {
+      setSortOrder(sortState.direction === "desc" ? "newest" : "oldest");
+    } else if (sortState?.key === "amount") {
+      setSortOrder(sortState.direction === "desc" ? "highest" : "lowest");
+    } else {
+      setSortOrder((prev) => {
+        if (prev === "newest") return "oldest";
+        if (prev === "oldest") return "newest";
+        if (prev === "highest") return "lowest";
+        return "highest";
+      });
+    }
+  };
 
   // Infinite scroll — show visibleCount rows from the filtered data
   const activeData = primaryTab === "swap" ? filteredSwapData : primaryTab === "otc" ? filteredOtcData : primaryTab === "bank-transfer" ? filteredBankData : filteredData;
@@ -469,6 +499,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       key: "amount",
       header: "Net Amount",
       width: 180,
+      sortable: true,
       render: (row: TransactionRow) => (
         <span className="txn-page__cell-amount">{(row.totalAmount - row.fee).toLocaleString()} {row.currency}</span>
       ),
@@ -662,6 +693,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       key: "amount",
       header: "Net Amount",
       width: 180,
+      sortable: true,
       render: (row: BankTransferRow) => (
         <span className="txn-page__cell-amount">{(row.totalAmount - row.fee).toLocaleString()} {row.currency}</span>
       ),
@@ -776,12 +808,12 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 empty="No transactions found."
                 scrollX={900}
                 scrollY={480}
-                sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
+                sort={{ key: "date", direction: sortOrder === "oldest" ? "asc" : "desc" }}
                 onSortChange={(sortState: { key: string; direction: "asc" | "desc" } | null) => {
                   if (sortState && sortState.key === "date") {
                     setSortOrder(sortState.direction === "desc" ? "newest" : "oldest");
                   } else {
-                    setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
+                    setSortOrder((prev) => (prev === "oldest" ? "newest" : "oldest"));
                   }
                 }}
                 onLoadMore={handleLoadMore}
@@ -841,12 +873,12 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 empty="No transactions found."
                 scrollX={900}
                 scrollY={480}
-                sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
+                sort={{ key: "date", direction: sortOrder === "oldest" ? "asc" : "desc" }}
                 onSortChange={(sortState: { key: string; direction: "asc" | "desc" } | null) => {
                   if (sortState && sortState.key === "date") {
                     setSortOrder(sortState.direction === "desc" ? "newest" : "oldest");
                   } else {
-                    setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
+                    setSortOrder((prev) => (prev === "oldest" ? "newest" : "oldest"));
                   }
                 }}
                 onLoadMore={handleLoadMore}
@@ -929,14 +961,8 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 empty="No transactions found."
                 scrollX={900}
                 scrollY={480}
-                sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
-                onSortChange={(sortState: { key: string; direction: "asc" | "desc" } | null) => {
-                  if (sortState && sortState.key === "date") {
-                    setSortOrder(sortState.direction === "desc" ? "newest" : "oldest");
-                  } else {
-                    setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
-                  }
-                }}
+                sort={tableSort}
+                onSortChange={handleSortChange}
                 onLoadMore={handleLoadMore}
                 hasMore={hasMore}
                 loading={loading}
@@ -1017,15 +1043,8 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 empty="No transactions found."
                 scrollX={900}
                 scrollY={480}
-                sort={{ key: "date", direction: sortOrder === "newest" ? "desc" : "asc" }}
-                onSortChange={(sortState: { key: string; direction: "asc" | "desc" } | null) => {
-                  if (sortState && sortState.key === "date") {
-                    setSortOrder(sortState.direction === "desc" ? "newest" : "oldest");
-                  } else {
-                    // When sort is cleared (null), toggle to the opposite direction
-                    setSortOrder((prev) => (prev === "newest" ? "oldest" : "newest"));
-                  }
-                }}
+                sort={tableSort}
+                onSortChange={handleSortChange}
                 onLoadMore={handleLoadMore}
                 hasMore={hasMore}
                 loading={loading}
