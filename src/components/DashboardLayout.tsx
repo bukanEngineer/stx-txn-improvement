@@ -64,11 +64,16 @@ export function DashboardLayout({ children, activeNav, onNavChange }: DashboardL
       >
         <Sidebar
           account="business"
+          company={undefined}
+          onCompanyClick={undefined}
+          companies={undefined}
+          companyActions={undefined}
+          onSwitchCompany={undefined}
+          onCompanyAction={undefined}
           items={NAV_ITEMS}
-          active={activeNav}
-          activeSubItem={undefined}
-          hoveredItem={undefined}
+          activeItemId={activeNav}
           onSelect={handleNavSelect}
+          linkComponent={undefined}
         />
       </aside>
 

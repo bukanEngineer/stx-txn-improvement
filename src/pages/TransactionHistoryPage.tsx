@@ -743,8 +743,6 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                     label={undefined}
                     helper={undefined}
                     error={undefined}
-                    prefix={undefined}
-                    suffix={undefined}
                     id={undefined}
                     defaultValue={undefined}
                     trailingButton={undefined}
@@ -809,8 +807,6 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                     label={undefined}
                     helper={undefined}
                     error={undefined}
-                    prefix={undefined}
-                    suffix={undefined}
                     id={undefined}
                     defaultValue={undefined}
                     trailingButton={undefined}
@@ -876,8 +872,6 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                     label={undefined}
                     helper={undefined}
                     error={undefined}
-                    prefix={undefined}
-                    suffix={undefined}
                     id={undefined}
                     defaultValue={undefined}
                     trailingButton={undefined}
@@ -966,8 +960,6 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                     label={undefined}
                     helper={undefined}
                     error={undefined}
-                    prefix={undefined}
-                    suffix={undefined}
                     id={undefined}
                     defaultValue={undefined}
                     trailingButton={undefined}

@@ -341,8 +341,6 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
                 label={undefined}
                 helper={undefined}
                 error={undefined}
-                prefix={undefined}
-                suffix={undefined}
                 id={undefined}
                 defaultValue={undefined}
                 trailingButton={undefined}
