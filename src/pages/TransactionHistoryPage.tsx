@@ -671,7 +671,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       header: "Bank Account",
       width: 200,
       render: (row: BankTransferRow) => (
-        <span>{row.bankName} {row.accountNumber}</span>
+        <span>{row.bankName} - {row.accountNumber}</span>
       ),
     },
     {

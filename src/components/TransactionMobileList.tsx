@@ -215,7 +215,7 @@ export function BankMobileList({
               <div className="mobile-swap-card__section">
                 <span className="mobile-swap-card__label">Bank Account</span>
                 <span className="mobile-swap-card__value">
-                  {row.bankName} {row.accountNumber}
+                  {row.bankName} - {row.accountNumber}
                 </span>
               </div>
               <div className="mobile-swap-card__section">

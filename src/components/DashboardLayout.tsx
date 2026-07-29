@@ -15,15 +15,6 @@ const NAV_ITEMS = [
   ...FILTERED_ITEMS.slice(FILTERED_ITEMS.findIndex((i: { id: string }) => i.id === "mint")),
 ] as typeof DEFAULT_NAV_ITEMS;
 
-const COMPANIES = [
-  { id: "acme", name: "Acme Corp", type: "Business Account", selected: true },
-];
-
-const COMPANY_ACTIONS = [
-  { id: "manage", icon: "settings", label: "Manage Company" },
-  { id: "add", icon: "add_circle", label: "Add Company" },
-];
-
 interface DashboardLayoutProps {
   children: ReactNode;
   activeNav: string;
@@ -73,13 +64,6 @@ export function DashboardLayout({ children, activeNav, onNavChange }: DashboardL
       >
         <Sidebar
           account="business"
-          company={{ name: "Acme Corp", type: "Business Account" }}
-          onCompanyClick={() => {}}
-          companies={COMPANIES}
-          companyActions={COMPANY_ACTIONS}
-          onSwitchCompany={() => {}}
-          onCompanyAction={() => {}}
-          defaultMenuOpen={false}
           items={NAV_ITEMS}
           active={activeNav}
           activeSubItem={undefined}

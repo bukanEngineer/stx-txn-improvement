@@ -250,13 +250,15 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
       key: "id",
       header: "Transaction ID",
       render: (row: MintTransactionRow) => (
-        <button
-          type="button"
-          className="mint-page__cell-id"
-          onClick={() => onSelectTransaction(row)}
-        >
-          {row.id}
-        </button>
+        <CopyCell value={row.fullId}>
+          <button
+            type="button"
+            className="mint-page__cell-id"
+            onClick={() => onSelectTransaction(row)}
+          >
+            {row.id}
+          </button>
+        </CopyCell>
       ),
     },
     {

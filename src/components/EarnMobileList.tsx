@@ -48,7 +48,7 @@ export function EarnMobileList({
           <div className="mobile-swap-card__body">
             <div className="mobile-swap-card__section">
               <span className="mobile-swap-card__label">Transaction ID</span>
-              <span className="mobile-swap-card__value">{row.fullId}</span>
+              <span className="mobile-swap-card__value mobile-swap-card__id-link">{row.fullId}</span>
             </div>
             <div className="mobile-swap-card__section">
               <span className="mobile-swap-card__label">Transaction Date</span>
