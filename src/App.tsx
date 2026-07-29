@@ -33,57 +33,66 @@ function App() {
     }
 
     if (activeNav === "mint") {
-      if (selectedMintTransaction) {
-        return (
-          <MintDetailPage
-            transaction={selectedMintTransaction}
-            onBack={() => setSelectedMintTransaction(null)}
-          />
-        );
-      }
-      return <MintPage onSelectTransaction={setSelectedMintTransaction} />;
+      // Keep table mounted so search/filter/sort state survives detail navigation
+      return (
+        <>
+          <div hidden={!!selectedMintTransaction}>
+            <MintPage onSelectTransaction={setSelectedMintTransaction} />
+          </div>
+          {selectedMintTransaction && (
+            <MintDetailPage
+              transaction={selectedMintTransaction}
+              onBack={() => setSelectedMintTransaction(null)}
+            />
+          )}
+        </>
+      );
     }
 
     if (activeNav === "earn") {
-      if (selectedEarnTransaction) {
-        return (
-          <EarnDetailPage
-            transaction={selectedEarnTransaction}
-            onBack={() => setSelectedEarnTransaction(null)}
-          />
-        );
-      }
-      return <EarnPage onSelectTransaction={setSelectedEarnTransaction} />;
+      return (
+        <>
+          <div hidden={!!selectedEarnTransaction}>
+            <EarnPage onSelectTransaction={setSelectedEarnTransaction} />
+          </div>
+          {selectedEarnTransaction && (
+            <EarnDetailPage
+              transaction={selectedEarnTransaction}
+              onBack={() => setSelectedEarnTransaction(null)}
+            />
+          )}
+        </>
+      );
     }
 
     // Default: transaction history flow
-    if (selectedTransaction) {
-      return (
-        <TransactionDetailPage
-          transaction={selectedTransaction}
-          onBack={() => setSelectedTransaction(null)}
-        />
-      );
-    }
-
-    if (selectedBankTransfer) {
-      return (
-        <BankTransferDetailPage
-          transaction={selectedBankTransfer}
-          onBack={() => setSelectedBankTransfer(null)}
-        />
-      );
-    }
+    const showingHistoryDetail = !!(selectedTransaction || selectedBankTransfer);
 
     return (
-      <TransactionHistoryPage
-        onSelectTransaction={setSelectedTransaction}
-        onSelectBankTransfer={setSelectedBankTransfer}
-        primaryTab={primaryTab}
-        onPrimaryTabChange={setPrimaryTab}
-        secondaryTab={secondaryTab}
-        onSecondaryTabChange={setSecondaryTab}
-      />
+      <>
+        <div hidden={showingHistoryDetail}>
+          <TransactionHistoryPage
+            onSelectTransaction={setSelectedTransaction}
+            onSelectBankTransfer={setSelectedBankTransfer}
+            primaryTab={primaryTab}
+            onPrimaryTabChange={setPrimaryTab}
+            secondaryTab={secondaryTab}
+            onSecondaryTabChange={setSecondaryTab}
+          />
+        </div>
+        {selectedTransaction && (
+          <TransactionDetailPage
+            transaction={selectedTransaction}
+            onBack={() => setSelectedTransaction(null)}
+          />
+        )}
+        {selectedBankTransfer && (
+          <BankTransferDetailPage
+            transaction={selectedBankTransfer}
+            onBack={() => setSelectedBankTransfer(null)}
+          />
+        )}
+      </>
     );
   };
 
