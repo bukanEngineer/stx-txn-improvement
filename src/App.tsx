@@ -4,12 +4,13 @@ import { DashboardLayout } from "./components/DashboardLayout";
 import { TransactionHistoryPage } from "./pages/TransactionHistoryPage";
 import { TransactionDetailPage } from "./pages/TransactionDetailPage";
 import { BankTransferDetailPage } from "./pages/BankTransferDetailPage";
+import { AdminTransferDetailPage } from "./pages/AdminTransferDetailPage";
 import { MintPage } from "./pages/MintPage";
 import { MintDetailPage } from "./pages/MintDetailPage";
 import { EarnPage } from "./pages/EarnPage";
 import { EarnDetailPage } from "./pages/EarnDetailPage";
 import { HomePage } from "./pages/HomePage";
-import type { TransactionRow, BankTransferRow } from "./data/mockTransactions";
+import type { TransactionRow, BankTransferRow, AdminTransferRow } from "./data/mockTransactions";
 import type { MintTransactionRow } from "./data/mockMintTransactions";
 import type { EarnTransactionRow } from "./data/mockEarnTransactions";
 
@@ -20,6 +21,7 @@ function App() {
   const [activeNav, setActiveNav] = useState("history");
   const [selectedTransaction, setSelectedTransaction] = useState<TransactionRow | null>(null);
   const [selectedBankTransfer, setSelectedBankTransfer] = useState<BankTransferRow | null>(null);
+  const [selectedAdminTransfer, setSelectedAdminTransfer] = useState<AdminTransferRow | null>(null);
   const [selectedEarnTransaction, setSelectedEarnTransaction] = useState<EarnTransactionRow | null>(null);
   const [selectedMintTransaction, setSelectedMintTransaction] = useState<MintTransactionRow | null>(null);
 
@@ -66,7 +68,7 @@ function App() {
     }
 
     // Default: transaction history flow
-    const showingHistoryDetail = !!(selectedTransaction || selectedBankTransfer);
+    const showingHistoryDetail = !!(selectedTransaction || selectedBankTransfer || selectedAdminTransfer);
 
     return (
       <>
@@ -74,6 +76,7 @@ function App() {
           <TransactionHistoryPage
             onSelectTransaction={setSelectedTransaction}
             onSelectBankTransfer={setSelectedBankTransfer}
+            onSelectAdminTransfer={setSelectedAdminTransfer}
             primaryTab={primaryTab}
             onPrimaryTabChange={setPrimaryTab}
             secondaryTab={secondaryTab}
@@ -90,6 +93,12 @@ function App() {
           <BankTransferDetailPage
             transaction={selectedBankTransfer}
             onBack={() => setSelectedBankTransfer(null)}
+          />
+        )}
+        {selectedAdminTransfer && (
+          <AdminTransferDetailPage
+            transaction={selectedAdminTransfer}
+            onBack={() => setSelectedAdminTransfer(null)}
           />
         )}
       </>

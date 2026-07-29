@@ -15,10 +15,10 @@ import {
   DateInput,
   useToast,
 } from "prohellox-designsystem";
-import { MOCK_BLOCKCHAIN_TRANSFER, MOCK_SWAP_TRANSACTIONS, MOCK_BANK_TRANSFER, MOCK_OTC_TRANSACTIONS } from "../data/mockTransactions";
-import type { TransactionRow, SwapTransactionRow, BankTransferRow } from "../data/mockTransactions";
+import { MOCK_BLOCKCHAIN_TRANSFER, MOCK_SWAP_TRANSACTIONS, MOCK_BANK_TRANSFER, MOCK_OTC_TRANSACTIONS, MOCK_ADMIN_TRANSFER } from "../data/mockTransactions";
+import type { TransactionRow, SwapTransactionRow, BankTransferRow, AdminTransferRow } from "../data/mockTransactions";
 import { useIsMobile } from "../hooks/useMediaQuery";
-import { BlockchainMobileList, BankMobileList, SwapMobileList } from "../components/TransactionMobileList";
+import { BlockchainMobileList, BankMobileList, SwapMobileList, AdminTransferMobileList } from "../components/TransactionMobileList";
 import "./TransactionHistoryPage.css";
 
 const PAGE_SIZE = 10;
@@ -29,6 +29,7 @@ type SecondaryTab = "all" | "action-needed";
 interface TransactionHistoryPageProps {
   onSelectTransaction: (transaction: TransactionRow) => void;
   onSelectBankTransfer: (transaction: BankTransferRow) => void;
+  onSelectAdminTransfer: (transaction: AdminTransferRow) => void;
   primaryTab: PrimaryTab;
   onPrimaryTabChange: (tab: PrimaryTab) => void;
   secondaryTab: SecondaryTab;
@@ -67,7 +68,7 @@ function CopyCell({ value, children, className }: { value: string; children: Rea
   );
 }
 
-export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransfer, primaryTab, onPrimaryTabChange, secondaryTab, onSecondaryTabChange }: TransactionHistoryPageProps) {
+export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransfer, onSelectAdminTransfer, primaryTab, onPrimaryTabChange, secondaryTab, onSecondaryTabChange }: TransactionHistoryPageProps) {
   const isMobile = useIsMobile();
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState<"newest" | "oldest" | "highest" | "lowest">("newest");
@@ -397,6 +398,58 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
     return result;
   }, [search, secondaryTab, sortOrder, filterStatus, filterAsset, filterType, filterDateFrom, filterDateTo]);
 
+  // Filter admin transfer data (no secondary tab filtering — same pattern as swap/OTC)
+  const filteredAdminData = useMemo<AdminTransferRow[]>(() => {
+    let result: AdminTransferRow[] = MOCK_ADMIN_TRANSFER;
+
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      result = result.filter(
+        (row) =>
+          row.id.toLowerCase().includes(q) ||
+          row.fullId.toLowerCase().includes(q) ||
+          row.details.toLowerCase().includes(q) ||
+          row.currency.toLowerCase().includes(q)
+      );
+    }
+
+    if (filterStatus.length > 0) {
+      result = result.filter((row) => filterStatus.includes(row.status.label));
+    }
+
+    if (filterAsset.length > 0) {
+      result = result.filter((row) => filterAsset.includes(row.currency));
+    }
+
+    if (filterDateFrom || filterDateTo) {
+      result = result.filter((row) => {
+        const rowDate = new Date(row.date).getTime();
+        if (filterDateFrom) {
+          const from = new Date(filterDateFrom).getTime();
+          if (rowDate < from) return false;
+        }
+        if (filterDateTo) {
+          const to = new Date(filterDateTo).getTime() + 86400000 - 1;
+          if (rowDate > to) return false;
+        }
+        return true;
+      });
+    }
+
+    result = [...result].sort((a, b) => {
+      if (sortOrder === "highest" || sortOrder === "lowest") {
+        return sortOrder === "highest"
+          ? b.netAmount - a.netAmount
+          : a.netAmount - b.netAmount;
+      }
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+      return sortOrder === "newest" ? dateB - dateA : dateA - dateB;
+    });
+
+    return result;
+  }, [search, sortOrder, filterStatus, filterAsset, filterDateFrom, filterDateTo]);
+
   const tableSort =
     sortOrder === "highest" || sortOrder === "lowest"
       ? { key: "amount", direction: (sortOrder === "highest" ? "desc" : "asc") as "asc" | "desc" }
@@ -418,7 +471,16 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
   };
 
   // Infinite scroll — show visibleCount rows from the filtered data
-  const activeData = primaryTab === "swap" ? filteredSwapData : primaryTab === "otc" ? filteredOtcData : primaryTab === "bank-transfer" ? filteredBankData : filteredData;
+  const activeData =
+    primaryTab === "swap"
+      ? filteredSwapData
+      : primaryTab === "otc"
+        ? filteredOtcData
+        : primaryTab === "bank-transfer"
+          ? filteredBankData
+          : primaryTab === "admin-transfer"
+            ? filteredAdminData
+            : filteredData;
   const visibleData = activeData.slice(0, visibleCount);
   const hasMore = visibleCount < activeData.length;
 
@@ -442,7 +504,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
   };
 
   // Is this an empty-state tab?
-  const isEmptyTab = primaryTab !== "blockchain-transfer" && primaryTab !== "swap" && primaryTab !== "bank-transfer" && primaryTab !== "otc";
+  const isEmptyTab = primaryTab !== "blockchain-transfer" && primaryTab !== "swap" && primaryTab !== "bank-transfer" && primaryTab !== "otc" && primaryTab !== "admin-transfer";
 
   // Empty state messages per tab
   const emptyMessages: Record<string, { title: string; sub: string }> = {
@@ -737,6 +799,59 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
     },
   ];
 
+  // Admin transfer table columns
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const adminColumns: any[] = [
+    {
+      key: "id",
+      header: "Transaction ID",
+      render: (row: AdminTransferRow) => (
+        <CopyCell value={row.fullId}>
+          <button
+            type="button"
+            className="txn-page__cell-id"
+            onClick={() => onSelectAdminTransfer(row)}
+          >
+            {row.id}
+          </button>
+        </CopyCell>
+      ),
+    },
+    {
+      key: "date",
+      header: "Transaction Date",
+      sortable: true,
+      date: true,
+    },
+    {
+      key: "details",
+      header: "Details",
+      width: 280,
+      render: (row: AdminTransferRow) => (
+        <span className="txn-page__cell-type">{row.details}</span>
+      ),
+    },
+    {
+      key: "amount",
+      header: "Net Amount",
+      width: 180,
+      sortable: true,
+      render: (row: AdminTransferRow) => (
+        <span className="txn-page__cell-amount">{row.netAmount.toLocaleString()} {row.currency}</span>
+      ),
+    },
+    {
+      key: "status",
+      header: "Status",
+      fixed: "right",
+      render: (row: AdminTransferRow) => (
+        <Tag tone={row.status.tone} icon={undefined} onRemove={undefined} onClick={undefined}>
+          {row.status.label}
+        </Tag>
+      ),
+    },
+  ];
+
   return (
     <div className="txn-page">
       <PageTitle
@@ -957,6 +1072,65 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
             ) : (
               <Table
                 columns={bankColumns as any}
+                rows={visibleData as any}
+                empty="No transactions found."
+                scrollX={900}
+                scrollY={480}
+                sort={tableSort}
+                onSortChange={handleSortChange}
+                onLoadMore={handleLoadMore}
+                hasMore={hasMore}
+                loading={loading}
+                endLabel={`All ${activeData.length} data already shown`}
+                timezone={Intl.DateTimeFormat().resolvedOptions().timeZone}
+                showTimezone
+              />
+            )}
+          </>
+        ) : primaryTab === "admin-transfer" ? (
+          <>
+            {/* Admin Transfer tab: toolbar without secondary tabs (same structure as swap) */}
+            <div className="txn-page__toolbar" style={{ justifyContent: "flex-start" }}>
+              <div className="txn-page__toolbar-actions">
+                <div className="txn-page__search">
+                  <Input
+                    type="search"
+                    placeholder="Search by Transaction ID"
+                    value={search}
+                    onChange={handleSearch}
+                    label={undefined}
+                    helper={undefined}
+                    error={undefined}
+                    id={undefined}
+                    defaultValue={undefined}
+                    trailingButton={undefined}
+                    size="small"
+                  />
+                </div>
+                <Button variant="tertiary" size="sm" onClick={openFilterModal}>
+                  {isFilterActive && <Badge tone="critical" dot>{null}</Badge>}
+                  <Icon name="tune" size={20} color={undefined} style={undefined} />
+                  {!isMobile && "Filter"}
+                </Button>
+                <Button variant="tertiary" size="sm">
+                  <Icon name="download" size={20} color={undefined} style={undefined} />
+                  {!isMobile && "Export CSV"}
+                </Button>
+              </div>
+            </div>
+
+            {isMobile ? (
+              <AdminTransferMobileList
+                rows={visibleData as AdminTransferRow[]}
+                onSelect={onSelectAdminTransfer}
+                hasMore={hasMore}
+                loading={loading}
+                onLoadMore={handleLoadMore}
+                endLabel={`All ${activeData.length} data already shown`}
+              />
+            ) : (
+              <Table
+                columns={adminColumns as any}
                 rows={visibleData as any}
                 empty="No transactions found."
                 scrollX={900}
