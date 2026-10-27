@@ -3,17 +3,18 @@ import {
   PageTitle,
   Button,
   Input,
-  Table,
+  DataTable,
   Tag,
   Icon,
   Badge,
-  Modal,
-  MultiSelect,
   DateInput,
+  Field,
   useToast,
-} from "prohellox-designsystem";
+} from "stxdesign-sandbox";
 import { MOCK_EARN_TRANSACTIONS } from "../data/mockEarnTransactions";
 import type { EarnTransactionRow } from "../data/mockEarnTransactions";
+import { AppModal } from "../components/AppModal";
+import { MultiSelectField } from "../components/MultiSelectField";
 import { useIsMobile } from "../hooks/useMediaQuery";
 import { EarnMobileList } from "../components/EarnMobileList";
 import "./EarnPage.css";
@@ -44,9 +45,7 @@ function CopyCell({ value, children, className }: { value: string; children: Rea
         onClick={handleCopy}
         aria-label={copied ? "Copied" : "Copy"}
       >
-        <span className="material-symbols-rounded">
-          {copied ? "check" : "content_copy"}
-        </span>
+        <Icon name={copied ? "check" : "content_copy"} />
       </button>
     </span>
   );
@@ -247,9 +246,6 @@ export function EarnPage({ onSelectTransaction }: EarnPageProps) {
                   setSearch(e.target.value);
                   setVisibleCount(PAGE_SIZE);
                 }}
-                label={undefined}
-                helper={undefined}
-                error={undefined}
                 id={undefined}
                 defaultValue={undefined}
                 trailingButton={undefined}
@@ -278,7 +274,7 @@ export function EarnPage({ onSelectTransaction }: EarnPageProps) {
             onSelect={onSelectTransaction}
           />
         ) : (
-          <Table
+          <DataTable
             columns={columns as any}
             rows={visibleData as any}
             empty="No earn transactions found."
@@ -314,12 +310,10 @@ export function EarnPage({ onSelectTransaction }: EarnPageProps) {
       </div>
 
       {/* Filter Modal */}
-      <Modal
+      <AppModal
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
         title="Filter Transactions"
-        illustration={undefined}
-        media={undefined}
         className="earn-filter-modal"
         footer={
           <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", width: "100%" }}>
@@ -334,10 +328,8 @@ export function EarnPage({ onSelectTransaction }: EarnPageProps) {
       >
         <div className="earn-filter">
           <div className="earn-filter__section">
-            <MultiSelect
+            <MultiSelectField
               label="Status"
-              helper={undefined}
-              error={undefined}
               options={[
                 { value: "Completed", label: "Completed" },
                 { value: "Pending", label: "Pending" },
@@ -347,14 +339,11 @@ export function EarnPage({ onSelectTransaction }: EarnPageProps) {
               placeholder="Select status"
               value={tempFilterStatus}
               onChange={(vals: string[]) => setTempFilterStatus(vals)}
-              id={undefined}
             />
           </div>
           <div className="earn-filter__section">
-            <MultiSelect
+            <MultiSelectField
               label="Type"
-              helper={undefined}
-              error={undefined}
               options={[
                 { value: "Reward Payout", label: "Reward Payout" },
                 { value: "Add Funds", label: "Add Funds" },
@@ -363,32 +352,31 @@ export function EarnPage({ onSelectTransaction }: EarnPageProps) {
               placeholder="Select type"
               value={tempFilterType}
               onChange={(vals: string[]) => setTempFilterType(vals)}
-              id={undefined}
             />
           </div>
           <div className="earn-filter__section">
-            <DateInput
-              label="Transaction Date"
-              helper={undefined}
-              error={undefined}
-              size="large"
-              range
-              placeholder={undefined}
-              value={undefined}
-              defaultValue={undefined}
-              onChange={undefined}
-              startValue={tempFilterDateFrom}
-              endValue={tempFilterDateTo}
-              onRangeChange={({ start, end }: { start: string; end: string }) => {
-                setTempFilterDateFrom(start || "");
-                setTempFilterDateTo(end || "");
-              }}
-              disabled={false}
-              id={undefined}
-            />
+            <Field.Root>
+              <Field.Label>Transaction Date</Field.Label>
+              <DateInput
+                size="large"
+                range
+                placeholder={undefined}
+                value={undefined}
+                defaultValue={undefined}
+                onChange={undefined}
+                startValue={tempFilterDateFrom}
+                endValue={tempFilterDateTo}
+                onRangeChange={({ start, end }: { start?: string; end?: string }) => {
+                  setTempFilterDateFrom(start || "");
+                  setTempFilterDateTo(end || "");
+                }}
+                disabled={false}
+                id={undefined}
+              />
+            </Field.Root>
           </div>
         </div>
-      </Modal>
+      </AppModal>
     </div>
   );
 }

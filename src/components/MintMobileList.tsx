@@ -1,4 +1,5 @@
-import { Button, Tag, PartnerLogo } from "prohellox-designsystem";
+import { Button, Tag } from "stxdesign-sandbox";
+import { NetworkLogo } from "./NetworkLogo";
 import type { MintTransactionRow } from "../data/mockMintTransactions";
 import "./MobileTxnList.css";
 
@@ -72,7 +73,7 @@ export function MintMobileList({
               <div className="mobile-swap-card__section">
                 <span className="mobile-swap-card__label">Network</span>
                 <span className="mobile-swap-card__value mobile-swap-card__value--inline">
-                  <PartnerLogo name={row.network.toLowerCase()} size={20} style={undefined} />
+                  <NetworkLogo network={row.network} size={20} />
                   {row.network}
                 </span>
               </div>

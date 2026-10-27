@@ -3,19 +3,21 @@ import {
   PageTitle,
   Button,
   Input,
-  Table,
+  DataTable,
   Tag,
   Icon,
   Badge,
   AssetMark,
   PartnerLogo,
-  Modal,
-  MultiSelect,
   DateInput,
+  Field,
   useToast,
-} from "prohellox-designsystem";
+} from "stxdesign-sandbox";
+import { NetworkLogo } from "../components/NetworkLogo";
 import { MOCK_MINT_TRANSACTIONS } from "../data/mockMintTransactions";
 import type { MintTransactionRow } from "../data/mockMintTransactions";
+import { AppModal } from "../components/AppModal";
+import { MultiSelectField } from "../components/MultiSelectField";
 import { useIsMobile } from "../hooks/useMediaQuery";
 import { MintMobileList } from "../components/MintMobileList";
 import "./MintPage.css";
@@ -25,7 +27,7 @@ function MintBanner({ onClose }: { onClose: () => void }) {
   return (
     <div className="mint-banner">
       <button type="button" className="mint-banner__close" onClick={onClose} aria-label="Close banner">
-        <span className="material-symbols-rounded">close</span>
+        <Icon name="close" />
       </button>
       <div className="mint-banner__content">
         <p className="mint-banner__title">Instantly convert funds into stablecoins</p>
@@ -38,17 +40,17 @@ function MintBanner({ onClose }: { onClose: () => void }) {
         <p className="mint-banner__steps-label">How it works:</p>
         <div className="mint-banner__steps-row">
           <div className="mint-banner__step">
-            <span className="material-symbols-rounded mint-banner__step-icon">wallet</span>
+            <Icon name="wallet" className="mint-banner__step-icon" />
             <span className="mint-banner__step-text">Select asset and destination</span>
           </div>
-          <span className="material-symbols-rounded mint-banner__step-arrow">arrow_right_alt</span>
+          <Icon name="arrow_forward" className="mint-banner__step-arrow" />
           <div className="mint-banner__step">
-            <span className="material-symbols-rounded mint-banner__step-icon">payments</span>
+            <Icon name="payments" className="mint-banner__step-icon" />
             <span className="mint-banner__step-text">Transfer funds to provided account details</span>
           </div>
-          <span className="material-symbols-rounded mint-banner__step-arrow">arrow_right_alt</span>
+          <Icon name="arrow_forward" className="mint-banner__step-arrow" />
           <div className="mint-banner__step">
-            <span className="material-symbols-rounded mint-banner__step-icon">currency_exchange</span>
+            <Icon name="swap_horiz" className="mint-banner__step-icon" />
             <span className="mint-banner__step-text">Receive stablecoin in your wallet</span>
           </div>
         </div>
@@ -68,7 +70,7 @@ function DestinationWallet() {
         </div>
         <button type="button" className="dest-wallet__setup-btn">
           Set Up
-          <span className="material-symbols-rounded">add</span>
+          <Icon name="add" />
         </button>
       </div>
       <div className="dest-wallet__item">
@@ -80,7 +82,7 @@ function DestinationWallet() {
           <div className="dest-wallet__wallet-address">
             <span>0xdac17f958d2ee523a....831ec7</span>
             <button type="button" className="mint-page__copy-btn" aria-label="Copy">
-              <span className="material-symbols-rounded">content_copy</span>
+              <Icon name="content_copy" />
             </button>
           </div>
           <div className="dest-wallet__wallet-meta">
@@ -93,7 +95,7 @@ function DestinationWallet() {
           </div>
         </div>
         <button type="button" className="dest-wallet__arrow-btn" aria-label="View details">
-          <span className="material-symbols-rounded">arrow_right_alt</span>
+          <Icon name="arrow_forward" />
         </button>
       </div>
     </div>
@@ -126,9 +128,7 @@ function CopyCell({ value, children, className }: { value: string; children: Rea
         onClick={handleCopy}
         aria-label={copied ? "Copied" : "Copy"}
       >
-        <span className="material-symbols-rounded">
-          {copied ? "check" : "content_copy"}
-        </span>
+        <Icon name={copied ? "check" : "content_copy"} />
       </button>
     </span>
   );
@@ -300,7 +300,7 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
       header: "Network",
       render: (row: MintTransactionRow) => (
         <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <PartnerLogo name={row.network.toLowerCase()} size={20} style={undefined} />
+          <NetworkLogo network={row.network} size={20} />
           {row.network}
         </span>
       ),
@@ -344,9 +344,6 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
                   setSearch(e.target.value);
                   setVisibleCount(PAGE_SIZE);
                 }}
-                label={undefined}
-                helper={undefined}
-                error={undefined}
                 id={undefined}
                 defaultValue={undefined}
                 trailingButton={undefined}
@@ -375,7 +372,7 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
             endLabel={`All ${filteredData.length} data already shown`}
           />
         ) : (
-          <Table
+          <DataTable
             columns={columns as any}
             rows={visibleData as any}
             empty="No mint transactions found."
@@ -411,12 +408,10 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
       </div>
 
       {/* Filter Modal */}
-      <Modal
+      <AppModal
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
         title="Filter Transactions"
-        illustration={undefined}
-        media={undefined}
         className="mint-filter-modal"
         footer={
           <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", width: "100%" }}>
@@ -431,10 +426,8 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
       >
         <div className="mint-filter">
           <div className="mint-filter__section">
-            <MultiSelect
+            <MultiSelectField
               label="Status"
-              helper={undefined}
-              error={undefined}
               options={[
                 { value: "Completed", label: "Completed" },
                 { value: "Pending", label: "Pending" },
@@ -444,14 +437,11 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
               placeholder="Select status"
               value={tempFilterStatus}
               onChange={(vals: string[]) => setTempFilterStatus(vals)}
-              id={undefined}
             />
           </div>
           <div className="mint-filter__section">
-            <MultiSelect
+            <MultiSelectField
               label="Asset"
-              helper={undefined}
-              error={undefined}
               options={[
                 { value: "XSGD", label: <span style={{ display: "flex", alignItems: "center", gap: 6 }}><PartnerLogo name="xsgd" size={18} style={undefined} />XSGD</span> },
                 { value: "XUSD", label: <span style={{ display: "flex", alignItems: "center", gap: 6 }}><PartnerLogo name="xusd" size={18} style={undefined} />XUSD</span> },
@@ -459,32 +449,31 @@ export function MintPage({ onSelectTransaction }: { onSelectTransaction: (transa
               placeholder="Select asset"
               value={tempFilterAsset}
               onChange={(vals: string[]) => setTempFilterAsset(vals)}
-              id={undefined}
             />
           </div>
           <div className="mint-filter__section">
-            <DateInput
-              label="Transaction Date"
-              helper={undefined}
-              error={undefined}
-              size="large"
-              range
-              placeholder={undefined}
-              value={undefined}
-              defaultValue={undefined}
-              onChange={undefined}
-              startValue={tempFilterDateFrom}
-              endValue={tempFilterDateTo}
-              onRangeChange={({ start, end }: { start: string; end: string }) => {
-                setTempFilterDateFrom(start || "");
-                setTempFilterDateTo(end || "");
-              }}
-              disabled={false}
-              id={undefined}
-            />
+            <Field.Root>
+              <Field.Label>Transaction Date</Field.Label>
+              <DateInput
+                size="large"
+                range
+                placeholder={undefined}
+                value={undefined}
+                defaultValue={undefined}
+                onChange={undefined}
+                startValue={tempFilterDateFrom}
+                endValue={tempFilterDateTo}
+                onRangeChange={({ start, end }: { start?: string; end?: string }) => {
+                  setTempFilterDateFrom(start || "");
+                  setTempFilterDateTo(end || "");
+                }}
+                disabled={false}
+                id={undefined}
+              />
+            </Field.Root>
           </div>
         </div>
-      </Modal>
+      </AppModal>
     </div>
   );
 }

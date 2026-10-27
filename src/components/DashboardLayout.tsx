@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { Sidebar, TopNavigation, DEFAULT_NAV_ITEMS } from "prohellox-designsystem";
+import { Sidebar, TopNavigation, DEFAULT_NAV_ITEMS } from "stxdesign-sandbox";
 import { useIsMobile } from "../hooks/useMediaQuery";
 import "./DashboardLayout.css";
 

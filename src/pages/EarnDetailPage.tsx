@@ -1,4 +1,4 @@
-import { Tag, Icon, useToast } from "prohellox-designsystem";
+import { Tag, Icon, useToast } from "stxdesign-sandbox";
 import type { EarnTransactionRow } from "../data/mockEarnTransactions";
 import "./EarnDetailPage.css";
 
@@ -21,7 +21,7 @@ export function EarnDetailPage({ transaction, onBack }: EarnDetailPageProps) {
     <div className="earn-detail">
       {/* Back link */}
       <button type="button" className="earn-detail__back" onClick={onBack}>
-        <Icon name="arrow_back" size={20} color={undefined} style={undefined} />
+        <Icon name="arrow_forward" size={20} color={undefined} style={{ transform: "scaleX(-1)" }} />
         <span>Back to Earn</span>
       </button>
 
@@ -121,7 +121,7 @@ export function EarnDetailPage({ transaction, onBack }: EarnDetailPageProps) {
 
       {/* Help guide */}
       <div className="earn-detail__guide">
-        <Icon name="emoji_objects" size={20} color={undefined} style={undefined} />
+        <Icon name="help" size={20} color={undefined} style={undefined} />
         <span>
           Need help?{" "}
           <a href="#" className="earn-detail__guide-link">Learn more</a>

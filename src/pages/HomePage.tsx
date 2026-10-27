@@ -1,4 +1,4 @@
-import { PageTitle } from "prohellox-designsystem";
+import { PageTitle } from "stxdesign-sandbox";
 
 export function HomePage() {
   return (

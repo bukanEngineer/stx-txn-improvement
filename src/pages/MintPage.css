@@ -39,7 +39,7 @@
   z-index: 1;
 }
 
-.mint-banner__close .material-symbols-rounded {
+.mint-banner__close .sx-icon {
   font-size: 14px;
   color: #002b2a;
 }
@@ -172,7 +172,7 @@
   white-space: nowrap;
 }
 
-.dest-wallet__setup-btn .material-symbols-rounded {
+.dest-wallet__setup-btn .sx-icon {
   font-size: 20px;
 }
 
@@ -246,7 +246,7 @@
   flex-shrink: 0;
 }
 
-.dest-wallet__arrow-btn .material-symbols-rounded {
+.dest-wallet__arrow-btn .sx-icon {
   font-size: 20px;
   color: #505454;
 }
@@ -347,7 +347,7 @@
   background: var(--surface-surface-secondary, #f6f7f9);
 }
 
-.mint-page__copy-btn .material-symbols-rounded {
+.mint-page__copy-btn .sx-icon {
   font-size: 16px;
 }
 

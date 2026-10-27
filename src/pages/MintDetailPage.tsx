@@ -1,4 +1,5 @@
-import { Tag, Icon, PartnerLogo, useToast } from "prohellox-designsystem";
+import { Tag, Icon, useToast } from "stxdesign-sandbox";
+import { NetworkLogo } from "../components/NetworkLogo";
 import type { MintTransactionRow } from "../data/mockMintTransactions";
 import "./MintDetailPage.css";
 
@@ -41,7 +42,7 @@ export function MintDetailPage({ transaction, onBack }: MintDetailPageProps) {
     <div className="mint-detail">
       {/* Back link */}
       <button type="button" className="mint-detail__back" onClick={onBack}>
-        <Icon name="arrow_back" size={20} color={undefined} style={undefined} />
+        <Icon name="arrow_forward" size={20} color={undefined} style={{ transform: "scaleX(-1)" }} />
         <span>Back to Mint</span>
       </button>
 
@@ -107,7 +108,7 @@ export function MintDetailPage({ transaction, onBack }: MintDetailPageProps) {
             <div className="mint-detail__field">
               <span className="mint-detail__label">Network</span>
               <span className="mint-detail__value" style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <PartnerLogo name={transaction.network.toLowerCase()} size={20} style={undefined} />
+                <NetworkLogo network={transaction.network} size={20} />
                 {transaction.network}
               </span>
             </div>
@@ -202,7 +203,7 @@ export function MintDetailPage({ transaction, onBack }: MintDetailPageProps) {
 
       {/* Help guide */}
       <div className="mint-detail__guide">
-        <Icon name="emoji_objects" size={20} color={undefined} style={undefined} />
+        <Icon name="help" size={20} color={undefined} style={undefined} />
         <span>
           Need help?{" "}
           <a href="#" className="mint-detail__guide-link">Learn more</a>

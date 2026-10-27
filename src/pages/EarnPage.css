@@ -106,7 +106,7 @@
   background: var(--surface-surface-secondary, #f6f7f9);
 }
 
-.earn-page__copy-btn .material-symbols-rounded {
+.earn-page__copy-btn .sx-icon {
   font-size: 16px;
 }
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Button, Tag, PartnerLogo, useToast } from "prohellox-designsystem";
+import { Button, Icon, Tag, useToast } from "stxdesign-sandbox";
+import { NetworkLogo } from "./NetworkLogo";
 import type { TransactionRow, SwapTransactionRow, BankTransferRow, AdminTransferRow } from "../data/mockTransactions";
 import "./MobileTxnList.css";
 
@@ -25,9 +26,7 @@ function CopyButton({ value }: { value: string }) {
       onClick={handleCopy}
       aria-label={copied ? "Copied" : "Copy"}
     >
-      <span className="material-symbols-rounded">
-        {copied ? "check" : "content_copy"}
-      </span>
+      <Icon name={copied ? "check" : "content_copy"} />
     </button>
   );
 }
@@ -121,7 +120,7 @@ export function BlockchainMobileList({
               <div className="mobile-swap-card__section">
                 <span className="mobile-swap-card__label">Network</span>
                 <span className="mobile-swap-card__value mobile-swap-card__value--inline">
-                  <PartnerLogo name={row.network.toLowerCase()} size={20} style={undefined} />
+                  <NetworkLogo network={row.network} size={20} />
                   {row.network}
                 </span>
               </div>

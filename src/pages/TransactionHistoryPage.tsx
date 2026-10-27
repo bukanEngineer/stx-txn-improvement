@@ -4,19 +4,21 @@ import {
   Button,
   Input,
   Tabs,
-  Table,
+  DataTable,
   Tag,
   Icon,
   EmptyState,
-  Modal,
   Badge,
   PartnerLogo,
-  MultiSelect,
   DateInput,
+  Field,
   useToast,
-} from "prohellox-designsystem";
+} from "stxdesign-sandbox";
+import { NetworkLogo } from "../components/NetworkLogo";
 import { MOCK_BLOCKCHAIN_TRANSFER, MOCK_SWAP_TRANSACTIONS, MOCK_BANK_TRANSFER, MOCK_OTC_TRANSACTIONS, MOCK_ADMIN_TRANSFER } from "../data/mockTransactions";
 import type { TransactionRow, SwapTransactionRow, BankTransferRow, AdminTransferRow } from "../data/mockTransactions";
+import { AppModal } from "../components/AppModal";
+import { MultiSelectField } from "../components/MultiSelectField";
 import { useIsMobile } from "../hooks/useMediaQuery";
 import { BlockchainMobileList, BankMobileList, SwapMobileList, AdminTransferMobileList } from "../components/TransactionMobileList";
 import "./TransactionHistoryPage.css";
@@ -60,9 +62,7 @@ function CopyCell({ value, children, className }: { value: string; children: Rea
         onClick={handleCopy}
         aria-label={copied ? "Copied" : "Copy"}
       >
-        <span className="material-symbols-rounded">
-          {copied ? "check" : "content_copy"}
-        </span>
+        <Icon name={copied ? "check" : "content_copy"} />
       </button>
     </span>
   );
@@ -583,7 +583,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       header: "Network",
       render: (row: TransactionRow) => (
         <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <PartnerLogo name={row.network.toLowerCase()} size={20} style={undefined} />
+          <NetworkLogo network={row.network} size={20} />
           {row.network}
         </span>
       ),
@@ -863,18 +863,21 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
 
       <div className="txn-page__card">
         {/* Primary Tabs */}
-        <Tabs
-          items={primaryTabItems as any}
-          activeTab={primaryTab}
-          onTabChange={handlePrimaryTabChange}
-          defaultTab="blockchain-transfer"
-        />
+        <Tabs.Root value={primaryTab} onValueChange={(value) => handlePrimaryTabChange(String(value))}>
+          <Tabs.List>
+            {primaryTabItems.map((tab) => (
+              <Tabs.Tab key={tab.id} value={tab.id}>
+                {tab.label}
+              </Tabs.Tab>
+            ))}
+          </Tabs.List>
+        </Tabs.Root>
 
         {isEmptyTab ? (
           /* Empty state for non-blockchain tabs */
           <EmptyState
             title={emptyMessages[primaryTab]?.title}
-            sub={emptyMessages[primaryTab]?.sub}
+            description={emptyMessages[primaryTab]?.sub}
           />
         ) : primaryTab === "swap" ? (
           <>
@@ -887,9 +890,6 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                     placeholder="Search by Transaction ID"
                     value={search}
                     onChange={handleSearch}
-                    label={undefined}
-                    helper={undefined}
-                    error={undefined}
                     id={undefined}
                     defaultValue={undefined}
                     trailingButton={undefined}
@@ -917,7 +917,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 endLabel={`All ${activeData.length} data already shown`}
               />
             ) : (
-              <Table
+              <DataTable
                 columns={swapColumns as any}
                 rows={visibleData as any}
                 empty="No transactions found."
@@ -951,9 +951,6 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                     placeholder="Search by Transaction ID"
                     value={search}
                     onChange={handleSearch}
-                    label={undefined}
-                    helper={undefined}
-                    error={undefined}
                     id={undefined}
                     defaultValue={undefined}
                     trailingButton={undefined}
@@ -982,7 +979,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 endLabel={`All ${activeData.length} data already shown`}
               />
             ) : (
-              <Table
+              <DataTable
                 columns={otcColumns as any}
                 rows={visibleData as any}
                 empty="No transactions found."
@@ -1016,9 +1013,6 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                     placeholder="Search by Transaction ID"
                     value={search}
                     onChange={handleSearch}
-                    label={undefined}
-                    helper={undefined}
-                    error={undefined}
                     id={undefined}
                     defaultValue={undefined}
                     trailingButton={undefined}
@@ -1070,7 +1064,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 endLabel={`All ${activeData.length} data already shown`}
               />
             ) : (
-              <Table
+              <DataTable
                 columns={bankColumns as any}
                 rows={visibleData as any}
                 empty="No transactions found."
@@ -1098,9 +1092,6 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                     placeholder="Search by Transaction ID"
                     value={search}
                     onChange={handleSearch}
-                    label={undefined}
-                    helper={undefined}
-                    error={undefined}
                     id={undefined}
                     defaultValue={undefined}
                     trailingButton={undefined}
@@ -1129,7 +1120,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 endLabel={`All ${activeData.length} data already shown`}
               />
             ) : (
-              <Table
+              <DataTable
                 columns={adminColumns as any}
                 rows={visibleData as any}
                 empty="No transactions found."
@@ -1157,9 +1148,6 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                     placeholder="Search by Transaction ID"
                     value={search}
                     onChange={handleSearch}
-                    label={undefined}
-                    helper={undefined}
-                    error={undefined}
                     id={undefined}
                     defaultValue={undefined}
                     trailingButton={undefined}
@@ -1211,7 +1199,7 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 endLabel={`All ${activeData.length} data already shown`}
               />
             ) : (
-              <Table
+              <DataTable
                 columns={columns as any}
                 rows={visibleData as any}
                 empty="No transactions found."
@@ -1232,12 +1220,10 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       </div>
 
       {/* Confirm Deposit Modal */}
-      <Modal
+      <AppModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
         title="Confirm Deposit"
-        illustration={undefined}
-        media={undefined}
         footer={
           <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
             <Button variant="secondary" size="md" onClick={() => setModalOpen(false)}>
@@ -1254,15 +1240,13 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
           <strong>{modalTransaction?.id}</strong> of{" "}
           <strong>{modalTransaction?.amount}</strong>?
         </p>
-      </Modal>
+      </AppModal>
 
       {/* Filter Modal */}
-      <Modal
+      <AppModal
         open={filterModalOpen}
         onClose={() => setFilterModalOpen(false)}
         title="Filter Transactions"
-        illustration={undefined}
-        media={undefined}
         className="txn-filter-modal"
         footer={
           <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", width: "100%" }}>
@@ -1277,10 +1261,8 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
       >
         <div className="txn-filter">
           <div className="txn-filter__section">
-            <MultiSelect
+            <MultiSelectField
               label="Status"
-              helper={undefined}
-              error={undefined}
               options={[
                 { value: "Completed", label: "Completed" },
                 { value: "Pending", label: "Pending" },
@@ -1291,15 +1273,12 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
               placeholder="Select status"
               value={tempFilterStatus}
               onChange={(vals: string[]) => setTempFilterStatus(vals)}
-              id={undefined}
             />
           </div>
           {(primaryTab === "bank-transfer" || primaryTab === "blockchain-transfer") && (
             <div className="txn-filter__section">
-              <MultiSelect
+              <MultiSelectField
                 label="Transaction Type"
-                helper={undefined}
-                error={undefined}
                 options={
                   primaryTab === "bank-transfer"
                     ? ([
@@ -1314,15 +1293,12 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
                 placeholder="Select transaction type"
                 value={tempFilterType}
                 onChange={(vals: string[]) => setTempFilterType(vals)}
-                id={undefined}
               />
             </div>
           )}
           <div className="txn-filter__section">
-            <MultiSelect
+            <MultiSelectField
               label="Asset"
-              helper={undefined}
-              error={undefined}
               options={[
                 { value: "SGD", label: "SGD" },
                 { value: "USD", label: "USD" },
@@ -1334,32 +1310,31 @@ export function TransactionHistoryPage({ onSelectTransaction, onSelectBankTransf
               placeholder="Select asset"
               value={tempFilterAsset}
               onChange={(vals: string[]) => setTempFilterAsset(vals)}
-              id={undefined}
             />
           </div>
           <div className="txn-filter__section">
-            <DateInput
-              label="Transaction Date"
-              helper={undefined}
-              error={undefined}
-              size="large"
-              range
-              placeholder={undefined}
-              value={undefined}
-              defaultValue={undefined}
-              onChange={undefined}
-              startValue={tempFilterDateFrom}
-              endValue={tempFilterDateTo}
-              onRangeChange={({ start, end }: { start: string; end: string }) => {
-                setTempFilterDateFrom(start || "");
-                setTempFilterDateTo(end || "");
-              }}
-              disabled={false}
-              id={undefined}
-            />
+            <Field.Root>
+              <Field.Label>Transaction Date</Field.Label>
+              <DateInput
+                size="large"
+                range
+                placeholder={undefined}
+                value={undefined}
+                defaultValue={undefined}
+                onChange={undefined}
+                startValue={tempFilterDateFrom}
+                endValue={tempFilterDateTo}
+                onRangeChange={({ start, end }: { start?: string; end?: string }) => {
+                  setTempFilterDateFrom(start || "");
+                  setTempFilterDateTo(end || "");
+                }}
+                disabled={false}
+                id={undefined}
+              />
+            </Field.Root>
           </div>
         </div>
-      </Modal>
+      </AppModal>
     </div>
   );
 }
