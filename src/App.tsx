@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ToastProvider } from "prohellox-designsystem";
+import { ToastProvider } from "stxdesign-sandbox";
 import { DashboardLayout } from "./components/DashboardLayout";
 import { TransactionHistoryPage } from "./pages/TransactionHistoryPage";
 import { TransactionDetailPage } from "./pages/TransactionDetailPage";

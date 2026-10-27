@@ -1,3 +1,5 @@
+import type { StatusTone } from "./mockTransactions";
+
 export interface EarnTransactionRow {
   id: string;
   fullId: string;
@@ -7,7 +9,7 @@ export interface EarnTransactionRow {
   fee: number;
   netAmount: number;
   currency: string;
-  status: { label: string; tone: string };
+  status: { label: string; tone: StatusTone };
   details: string;
 }
 

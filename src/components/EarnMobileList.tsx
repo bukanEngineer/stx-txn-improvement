@@ -1,4 +1,4 @@
-import { Button, Tag } from "prohellox-designsystem";
+import { Button, Tag } from "stxdesign-sandbox";
 import type { EarnTransactionRow } from "../data/mockEarnTransactions";
 import "./MobileTxnList.css";
 

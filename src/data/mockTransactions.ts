@@ -1,3 +1,6 @@
+/** Matches the Tag `tone` values in the design system. */
+export type StatusTone = "neutral" | "positive" | "critical" | "warning" | "info";
+
 export interface TransactionRow {
   id: string;
   fullId: string;
@@ -12,7 +15,7 @@ export interface TransactionRow {
   sourceCurrency?: string;
   wallet: string;
   network: string;
-  status: { label: string; tone: string };
+  status: { label: string; tone: StatusTone };
 }
 
 /**
@@ -326,7 +329,7 @@ export interface SwapTransactionRow {
   fromAmount: number;
   toAmount: number;
   rate: number;
-  status: { label: string; tone: string };
+  status: { label: string; tone: StatusTone };
 }
 
 export const MOCK_SWAP_TRANSACTIONS: SwapTransactionRow[] = [
@@ -514,7 +517,7 @@ export interface BankTransferRow {
   referenceNumber: string;
   network: "FAST" | "MEPS" | "SWIFT";
   swiftCode: string;
-  status: { label: string; tone: string };
+  status: { label: string; tone: StatusTone };
 }
 
 export const MOCK_BANK_TRANSFER: BankTransferRow[] = [
@@ -954,7 +957,7 @@ export interface AdminTransferRow {
   fee: number;
   netAmount: number;
   currency: string;
-  status: { label: string; tone: string };
+  status: { label: string; tone: StatusTone };
 }
 
 export const MOCK_ADMIN_TRANSFER: AdminTransferRow[] = [

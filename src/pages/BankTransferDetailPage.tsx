@@ -1,4 +1,4 @@
-import { Tag, Icon, useToast } from "prohellox-designsystem";
+import { Tag, Icon, useToast } from "stxdesign-sandbox";
 import type { BankTransferRow } from "../data/mockTransactions";
 import "./TransactionDetailPage.css";
 
@@ -23,7 +23,7 @@ export function BankTransferDetailPage({ transaction, onBack }: BankTransferDeta
     <div className="txn-detail">
       {/* Back link */}
       <button type="button" className="txn-detail__back" onClick={onBack}>
-        <Icon name="arrow_back" size={20} color={undefined} style={undefined} />
+        <Icon name="arrow_forward" size={20} color={undefined} style={{ transform: "scaleX(-1)" }} />
         <span>Back to Transactions</span>
       </button>
 
@@ -162,7 +162,7 @@ export function BankTransferDetailPage({ transaction, onBack }: BankTransferDeta
 
       {/* Help guide */}
       <div className="txn-detail__guide">
-        <Icon name="emoji_objects" size={20} color={undefined} style={undefined} />
+        <Icon name="help" size={20} color={undefined} style={undefined} />
         <span>
           Need help?{" "}
           <a href="#" className="txn-detail__guide-link">Learn more</a>

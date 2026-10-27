@@ -1,4 +1,5 @@
-import { Tag, Icon, PartnerLogo, useToast } from "prohellox-designsystem";
+import { Tag, Icon, useToast } from "stxdesign-sandbox";
+import { NetworkLogo } from "../components/NetworkLogo";
 import type { TransactionRow } from "../data/mockTransactions";
 import "./TransactionDetailPage.css";
 
@@ -41,7 +42,7 @@ export function TransactionDetailPage({ transaction, onBack }: TransactionDetail
     <div className="txn-detail">
       {/* Back link */}
       <button type="button" className="txn-detail__back" onClick={onBack}>
-        <Icon name="arrow_back" size={20} color={undefined} style={undefined} />
+        <Icon name="arrow_forward" size={20} color={undefined} style={{ transform: "scaleX(-1)" }} />
         <span>Back to Transactions</span>
       </button>
 
@@ -107,7 +108,7 @@ export function TransactionDetailPage({ transaction, onBack }: TransactionDetail
             <div className="txn-detail__field">
               <span className="txn-detail__label">Network</span>
               <span className="txn-detail__value" style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <PartnerLogo name={transaction.network.toLowerCase()} size={20} style={undefined} />
+                <NetworkLogo network={transaction.network} size={20} />
                 {transaction.network}
               </span>
             </div>
@@ -202,7 +203,7 @@ export function TransactionDetailPage({ transaction, onBack }: TransactionDetail
 
       {/* Help guide */}
       <div className="txn-detail__guide">
-        <Icon name="emoji_objects" size={20} color={undefined} style={undefined} />
+        <Icon name="help" size={20} color={undefined} style={undefined} />
         <span>
           Need help?{" "}
           <a href="#" className="txn-detail__guide-link">Learn more</a>

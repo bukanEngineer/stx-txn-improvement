@@ -1,3 +1,5 @@
+import type { StatusTone } from "./mockTransactions";
+
 export interface MintTransactionRow {
   id: string;
   fullId: string;
@@ -11,7 +13,7 @@ export interface MintTransactionRow {
   wallet: string;
   network: string;
   type: string;
-  status: { label: string; tone: string };
+  status: { label: string; tone: StatusTone };
 }
 
 export const MOCK_MINT_TRANSACTIONS: MintTransactionRow[] = [

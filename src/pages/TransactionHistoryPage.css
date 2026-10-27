@@ -23,7 +23,7 @@
   flex: 1;
 }
 
-/* TransferPanel.css in prohellox-designsystem leaks a global
+/* TransferPanel.css in stxdesign-sandbox leaks a global
    `.tabs { border-bottom }` that doubles the Tabs strip divider.
    Drop the leaked border and stretch the strip so its divider
    spans the full card width (strip is content-sized by default). */
@@ -31,7 +31,7 @@
   border-bottom: none;
 }
 
-.txn-page__card > .tabs .tabs__strip {
+.txn-page__card > .tabs .tabs__list {
   width: 100%;
 }
 
@@ -159,7 +159,7 @@
   background: var(--surface-surface-secondary, #f6f7f9);
 }
 
-.txn-page__copy-btn .material-symbols-rounded {
+.txn-page__copy-btn .sx-icon {
   font-size: 16px;
 }
 
@@ -202,7 +202,7 @@
   }
 
   /* Scroll the Tabs root only — `[class*="tabs"]` also matched
-     `.tabs__strip` / `.tabs__tab` and clipped the active underline
+     `.tabs__list` / `.tabs__tab` and clipped the active underline
      (`::after { bottom: -1px }`) that sits over the strip border.
      Put the divider on `.tabs` (full card width) instead of the
      content-sized strip, so the line doesn't stop mid-row (e.g. at OTC). */
@@ -212,7 +212,7 @@
     border-bottom: 1px solid var(--border, #d8d8d8);
   }
 
-  .txn-page__card > .tabs .tabs__strip {
+  .txn-page__card > .tabs .tabs__list {
     width: max-content;
     min-width: 100%;
     border-bottom: none;
